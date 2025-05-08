@@ -1,0 +1,146 @@
+.testimonios-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.testimonios-carousel {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 300px;
+}
+
+.testimonios-content {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+}
+
+.testimonio-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateX(50px);
+}
+
+.testimonio-card.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.testimonio-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.testimonio-imagen {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 20px;
+  border: 3px solid #4caf50;
+}
+
+.testimonio-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.testimonio-info h3 {
+  margin: 0 0 5px;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.testimonio-graduacion {
+  color: #777;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.testimonio-texto {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.testimonio-texto p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+.carousel-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1;
+  margin: 0 10px;
+  transition: background-color 0.3s;
+}
+
+.carousel-button:hover {
+  background-color: #3d8b40;
+}
+
+.testimonios-indicadores {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.indicador {
+  width: 12px;
+  height: 12px;
+  background-color: #ddd;
+  border-radius: 50%;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.indicador.active {
+  background-color: #4caf50;
+}
+
+@media (max-width: 768px) {
+  .testimonios-carousel {
+    height: 350px;
+  }
+
+  .testimonio-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .testimonio-imagen {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+}

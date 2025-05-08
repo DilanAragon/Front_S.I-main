@@ -1,0 +1,31 @@
+.card-beneficios-container {
+    display: flex;
+    justify-content: center;
+    margin: 32px 0;
+  }
+  
+  .card-beneficios {
+    max-width: 768px;
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-beneficios h2 {
+    text-align: center;
+    font-size: 20px;
+    color: #0B7F46;
+    margin-bottom: 16px;
+  }
+  
+  .card-beneficios ul {
+    list-style: disc;
+    padding-left: 20px;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  

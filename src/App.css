@@ -1,0 +1,1318 @@
+/* Estilo global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+#root {
+  /* max-width: 1280px; */
+  margin: 0 auto;
+  /* padding: 2rem; */
+  text-align: center;
+}
+
+/* Contenedor principal */
+.app-container {
+  padding: 20px;
+  margin: 0;
+  max-width: 100%; /* Ocupa todo el ancho del navegador */
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* Modo oscuro */
+.app-container.dark-mode {
+  background-color: #121212; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+/* Asegura que la cabecera esté encima del hero */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px; /* Aumenta el padding horizontal */
+  background-color: #1e1e1e;
+  border-bottom: 1px solid #333;
+  width: 100%; /* Ocupa todo el ancho */
+  box-sizing: border-box;
+}
+
+.main-header.dark-mode {
+  background-color: #121212;
+}
+
+/* También puedes hacerlo sobre el nav directamente */
+.nav-menu {
+  display: flex;
+  gap: 15px;
+  position: relative;
+  z-index: 300;
+}
+
+/* El sub-menú ya tenía un z-index, pero asegurémoslo */
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 180px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 400;    /* más alto que el header */
+  display: block !important;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #1a237e;
+  color: white;
+  padding: 20px;
+}
+
+.logo h2 {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar nav ul li {
+  padding: 15px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.sidebar nav ul li:hover, .sidebar nav ul li.active {
+  background-color: #3949ab;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+  margin-bottom: 15px;
+  color: #1a237e;
+}
+
+.card-content {
+  min-height: 200px;
+}
+
+.hero-section {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('./assets/ing-sistemas.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 4rem 2rem;
+  margin-bottom: 4rem;
+  width: 100%; /* Ocupa todo el ancho */
+  position: relative;
+  backdrop-filter: blur(2px);
+}
+
+.hero-content {
+  max-width: 800px;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+}
+
+.hero-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  background-color: #90C074;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #7aa55f;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .hero-content h2 {
+    font-size: 2rem;
+  }
+  
+  .hero-content p {
+    font-size: 1rem;
+  }
+}
+
+/* Sección de información */
+.info-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding: 4rem 2rem;
+  max-width: 100%; /* Ocupa todo el ancho */
+  margin: 0 auto;
+  background-color: #f8f9fa;
+  position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-container.dark-mode .info-section {
+  background-color: #000000; /* Fondo negro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+/* Add a subtle separator */
+.info-section::before {
+  content: '';
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 1px;
+  background-color: #90C074;
+  opacity: 0.5;
+}
+
+.app-container.dark-mode .info-section::before {
+  background-color: #65a34f; /* Verde más claro para modo oscuro */
+  opacity: 0.8;
+}
+
+.info-card {
+  text-align: justify;
+  background-color: #FFFFFF;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0; /* Bordes claros en modo claro */
+}
+
+/* Cards - Modo Claro */
+.info-card {
+  background-color: #ffffff;
+  color: #333;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e0e0e0; /* Bordes claros en modo claro */
+}
+
+/* Cards - Modo Oscuro */
+.app-container.dark-mode .info-card {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+  border: 1px solid #333; /* Bordes oscuros en modo oscuro */
+}
+
+/* Hover effect for both modes */
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.app-container.dark-mode .info-card:hover {
+  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.15);
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.info-card h3 {
+  color: #0B7F46;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #90C074;
+}
+
+.info-card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+  flex-grow: 1;
+}
+
+/* Estilo para los textos en modo claro */
+.info-card p {
+  color: #333; /* Texto negro */
+  transition: color 0.3s ease;
+}
+
+/* Estilo para los textos en modo oscuro */
+.app-container.dark-mode .info-card p {
+  color: #ffffff; /* Texto blanco */
+}
+
+.info-card.values ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-card.values li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.info-card.values li:before {
+  content: "•";
+  color: #0B7F46;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+@media (max-width: 1024px) {
+  .info-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .info-section {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-card {
+    padding: 2rem;
+  }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+}
+
+.logo-img {
+  /* height: 200px; */
+  width: 280px;
+  object-fit: contain;
+}
+
+.logo-container h1 {
+  color: #FFFFFF;
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 600;
+}
+
+.main-footer {
+  background-color: #1e3d59; /* Azul oscuro profesional */
+  color: #FFFFFF;
+  padding: 4rem 2rem 2rem;
+  margin-top: auto;
+  width: 100%; /* Ocupa todo el ancho */
+  box-sizing: border-box;
+}
+
+.footer-section h4 {
+  color: #ffc13b; /* Amarillo cálido para los títulos */
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+  position: relative;
+  padding-bottom: 0.8rem;
+}
+
+.footer-section h4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 3px;
+  background-color: #ffc13b; /* Línea decorativa del mismo color */
+}
+
+.footer-section a:hover {
+  color: #ffc13b; /* Color hover de los enlaces */
+}
+
+.social-icons a:hover {
+  background-color: #ffc13b; /* Color hover de los iconos sociales */
+  transform: translateY(-3px);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Reducido de 1rem */
+}
+
+.footer-section h4 {
+  margin-bottom: 0.8rem; /* Reducido de 1.2rem */
+  padding-bottom: 0.5rem; /* Reducido de 0.8rem */
+}
+
+.footer-section p {
+  margin: 0.2rem 0; /* Reducido de 0.5rem */
+  line-height: 1.4; /* Reducido de 1.6 */
+}
+
+.footer-section a {
+  margin: 0.2rem 0; /* Reducido de 0.5rem */
+}
+
+.main-footer {
+  background-color: #90C074;
+  color: #FFFFFF;
+  padding: 1.5rem 2rem 0.5rem; /* Reducido aún más */
+  margin-top: auto;
+}
+
+.footer-content {
+  gap: 1rem; /* Reducido */
+}
+
+.footer-section {
+  gap: 0.2rem; /* Reducido */
+}
+
+.footer-section h4 {
+  font-size: 1.1rem; /* Más pequeño */
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.2rem;
+}
+
+.footer-section p, .footer-section a {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.social-icons {
+  margin-top: 0.5rem;
+  gap: 1.5rem; /* Reducido */
+}
+
+.footer-bottom {
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+}
+
+.social-icon {
+  width: 30px; /* Iconos más pequeños */
+  height: 30px;
+}
+
+.footer-section h4 {
+  color: #1e3d59;
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.footer-section h4::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 3px;
+  background-color: #1e3d59;
+}
+
+.social-icons a:hover {
+  background-color: #1e3d59;
+  transform: translateY(-3px);
+}
+
+.footer-section a:hover {
+  color: #1e3d59;
+}
+
+.footer-section p {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.footer-section a {
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: block;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.footer-section a:hover {
+  color: #d4dad1;
+}
+
+.social-icons {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 1.5rem;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+  /* Removemos el filtro que hacía los iconos blancos */
+  /* filter: brightness(0) invert(1); */
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo más claro para que se vean los iconos */
+  transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+  background-color: #FFFFFF;
+  transform: translateY(-5px);
+}
+
+.social-icons a:hover .social-icon {
+  transform: scale(1.1);
+}
+
+.social-icons a:hover {
+  background-color: #e4e4e4;
+  transform: translateY(-3px);
+}
+
+/* Copyright section */
+.footer-bottom {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer-section h4::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+.nav-menu {
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-menu li {
+  list-style: none;
+  cursor: pointer;
+  color: #e0e0e0;
+  padding: 10px 15px;
+  transition: background-color 0.3s;
+  color: #666;
+  transition: all 0.3s ease;
+  padding: 15px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid transparent; /* Add transparent border initially */
+}
+
+.nav-menu li:hover {
+  background-color: #333;
+  color: #2E7D32;
+  border: none; /* Remove all borders */
+  border-bottom: 1px solid #2E7D32; /* Add only bottom border */
+}
+
+/* For the active state */
+.nav-menu li.active {
+  border-bottom: 2px solid #4caf50;
+  color: #2E7D32;
+  border: none; /* Remove all borders */
+  border-bottom: 1px solid #2E7D32; /* Add only bottom border */
+}
+
+/* Specific styles for the dropdown trigger */
+.nav-menu .dropdown .nav-item {
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.nav-menu .dropdown:hover .nav-item {
+  color: #2E7D32;
+}
+
+.nav-menu > ul {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-menu li {
+  color: rgb(163, 163, 163);
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  position: relative;
+}
+
+.nav-menu li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.nav-menu li.active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-menu li::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.nav-menu li:hover::after,
+.nav-menu li.active::after {
+  width: 80%;
+}
+
+@media (max-width: 768px) {
+  .nav-menu ul {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .nav-menu li {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.submenu {
+  /* Elimina cualquier flex heredado y fuerza columna */
+  display: block !important;
+  position: absolute;      /* para que flote sobre el contenido */
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 180px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 200;
+}
+
+.submenu li {
+  list-style: none;
+  display: block !important; /* ocupa toda la anchura */
+  padding: 10px 16px;
+  color: #0B7F46;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.submenu li + li {
+  margin-top: 4px; /* opcional: separa cada ítem */
+}
+
+.submenu li:hover {
+  background-color: #f0f0f0;
+}
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 180px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 100001; /* Higher than header and nav */
+}
+
+.dropdown {
+  position: relative;
+}
+
+/* Add these styles at the top level */
+.landing-container {
+  position: relative;
+}
+
+.main-header {
+  position: relative;
+  z-index: 100000; /* Very high z-index */
+  background: white;
+}
+
+.nav-menu {
+  position: relative;
+  z-index: 100000;
+}
+
+.dropdown {
+  position: relative;
+  z-index: 100000;
+}
+
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 180px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 100001; /* Higher than header and nav */
+}
+
+/* Ensure hero section stays below */
+.hero-section {
+  position: relative;
+  z-index: 1;
+}
+
+.switch-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.toggle-button {
+  background-color: #ccc;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-button.on {
+  background-color: #0B7F46; /* Verde */
+}
+
+.toggle-button.off {
+  background-color: #d32f2f; /* Rojo */
+}
+
+.toggle-button:hover {
+  opacity: 0.9;
+}
+
+/* General styles for light and dark modes */
+.app-container.light-mode {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.app-container.dark-mode {
+  background-color: #121212; /* Fondo oscuro total */
+  color: #e0e0e0; /* Texto claro */
+}
+
+/* Header styles */
+.main-header {
+  background-color: #ffffff;
+  color: #000000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.main-header.dark-mode {
+  background-color: #1e1e1e; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+/* Footer styles */
+.main-footer {
+  background-color: #f1f1f1;
+  color: #000000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.main-footer.dark-mode {
+  background-color: #1e1e1e; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+/* Cards - Modo Claro */
+.info-card {
+  background-color: #ffffff;
+  color: #333;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e0e0e0; /* Bordes claros en modo claro */
+}
+
+/* Cards - Modo Oscuro */
+.app-container.dark-mode .info-card {
+  background-color: #1e1e1e; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+  border: 1px solid #333; /* Bordes oscuros en modo oscuro */
+}
+
+/* Hover effect for both modes */
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.app-container.dark-mode .info-card:hover {
+  box-shadow: 0 6px 12px rgba(255, 255, 255, 0.15);
+}
+
+/* Navbar styles */
+.nav-menu {
+  background-color: #ffffff;
+  color: #000000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-container.dark-mode .nav-menu {
+  background-color: #1e1e1e; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+.nav-menu li {
+  color: #666;
+}
+
+.app-container.dark-mode .nav-menu li {
+  color: #e0e0e0; /* Texto claro */
+}
+
+.nav-menu li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.app-container.dark-mode .nav-menu li:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Hover claro */
+}
+
+/* Hero section */
+.hero-section {
+  background-color: #121212; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-container.dark-mode .hero-section {
+  background-color: #1e1e1e; /* Fondo más oscuro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+/* Botón CTA */
+.cta-button {
+  background-color: #90C074;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.app-container.dark-mode .cta-button {
+  background-color: #0b7f46; /* Verde oscuro */
+  color: #ffffff; /* Texto claro */
+}
+
+.cta-button:hover {
+  background-color: #7aa55f;
+}
+
+.app-container.dark-mode .cta-button:hover {
+  background-color: #065f34; /* Hover verde oscuro */
+}
+
+/* Footer links */
+.footer-section a {
+  color: #90C074;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.app-container.dark-mode .footer-section a {
+  color: #90C074; /* Verde claro */
+}
+
+.footer-section a:hover {
+  color: #7aa55f;
+}
+
+.app-container.dark-mode .footer-section a:hover {
+  color: #65a34f; /* Hover verde claro */
+}
+
+/* Footer titles */
+.footer-section h4 {
+  color: #ffc13b; /* Amarillo cálido */
+}
+
+.app-container.dark-mode .footer-section h4 {
+  color: #ffc13b; /* Mantén el amarillo cálido en modo oscuro */
+}
+
+/* Toggle button styles */
+.switch-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 25px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 25px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 19px;
+  width: 19px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #0b7f46;
+}
+
+input:checked + .slider:before {
+  transform: translateX(25px);
+}
+
+/* Fondo de la sección de información en modo claro */
+.info-section {
+  background-color: #f8f9fa; /* Fondo claro */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Fondo de la sección de información en modo oscuro */
+.app-container.dark-mode .info-section {
+  background-color: #000000; /* Fondo negro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+/* Card de Valores Institucionales - Modo Claro */
+.info-card.values {
+  background-color: #ffffff; /* Fondo blanco */
+  color: #333; /* Texto oscuro */
+  border: 1px solid #e0e0e0; /* Bordes claros */
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Card de Valores Institucionales - Modo Oscuro */
+.app-container.dark-mode .info-card.values {
+  background-color: #1e1e1e; /* Fondo oscuro */
+  color: #ffffff; /* Texto claro */
+  border: 1px solid #333; /* Bordes oscuros */
+}
+
+/* Lista dentro de la card de Valores Institucionales */
+.info-card.values ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-card.values li {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #e0e0e0; /* Bordes claros en modo claro */
+  color: #333; /* Texto oscuro */
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Lista en modo oscuro */
+.app-container.dark-mode .info-card.values li {
+  border-bottom: 1px solid #444; /* Bordes oscuros */
+  color: #ffffff; /* Texto claro */
+}
+
+/* Punto decorativo de la lista */
+.info-card.values li:before {
+  content: "•";
+  color: #0B7F46; /* Verde */
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* Submenu - Modo Claro */
+.submenu {
+  background-color: #ffffff; /* Fondo blanco */
+  color: #333; /* Texto oscuro */
+  border: 1px solid #ccc; /* Bordes claros */
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Submenu - Modo Oscuro */
+.app-container.dark-mode .submenu {
+  background-color: #1e1e1e; /* Fondo oscuro */
+  color: #ffffff; /* Texto claro */
+  border: 1px solid #444; /* Bordes oscuros */
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Elementos del submenu - Modo Claro */
+.submenu li {
+  padding: 0.8rem 1rem;
+  color: #333; /* Texto oscuro */
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Elementos del submenu - Modo Oscuro */
+.app-container.dark-mode .submenu li {
+  color: #ffffff; /* Texto claro */
+}
+
+/* Hover en los elementos del submenu */
+.submenu li:hover {
+  background-color: rgba(0, 0, 0, 0.05); /* Hover claro */
+}
+
+.app-container.dark-mode .submenu li:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Hover oscuro */
+}
+
+/* Estilo para los elementos del menú principal */
+.nav-menu li {
+  color: #e0e0e0; /* Texto claro en modo oscuro */
+  transition: all 0.3s ease;
+}
+
+/* Hover para los elementos del menú principal */
+.nav-menu li:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Hover claro */
+}
+
+/* Estilo específico para el dropdown de Empresas */
+.nav-menu .dropdown .nav-item {
+  color: inherit; /* Hereda el color del resto del menú */
+  transition: all 0.3s ease;
+}
+
+/* Hover para el dropdown de Empresas */
+.nav-menu .dropdown:hover .nav-item {
+  background-color: rgba(255, 255, 255, 0.1); /* Hover claro */
+}
+
+/* Submenu - Modo Claro */
+.submenu {
+  background-color: #ffffff; /* Fondo blanco */
+  color: #333; /* Texto oscuro */
+  border: 1px solid #ccc; /* Bordes claros */
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Submenu - Modo Oscuro */
+.app-container.dark-mode .submenu {
+  background-color: #1e1e1e; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+  border: 1px solid #444; /* Bordes oscuros */
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Elementos del submenu */
+.submenu li {
+  padding: 0.8rem 1rem;
+  color: inherit; /* Hereda el color del submenu */
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover en los elementos del submenu */
+.submenu li:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Hover claro */
+}
+
+/* Botones del header - Modo Claro */
+.main-header .nav-menu li {
+  color: #000000; /* Texto negro */
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Botones del header - Hover en Modo Claro */
+.main-header .nav-menu li:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Fondo gris claro */
+  color: #000000; /* Texto negro */
+}
+
+/* Botones del header - Modo Oscuro */
+.app-container.dark-mode .main-header .nav-menu li {
+  color: #ffffff; /* Texto blanco */
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Botones del header - Hover en Modo Oscuro */
+.app-container.dark-mode .main-header .nav-menu li:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Fondo gris claro */
+  color: #ffffff; /* Texto blanco */
+}
+
+/* Footer */
+.main-footer {
+  background-color: #1e3d59; /* Azul oscuro */
+  color: #ffffff;
+  padding: 20px;
+  width: 100%; /* Ocupa todo el ancho */
+  box-sizing: border-box;
+}
+
+/* Hero Section */
+.hero-section {
+  width: 100%; /* Ocupa todo el ancho */
+  min-height: 500px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 4rem 2rem;
+}
+
+/* Tablas */
+.data-section {
+  width: 100%; /* Ocupa todo el ancho */
+  background-color: #ffffff; /* Fondo claro */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-container.dark-mode .data-section {
+  background-color: #121212; /* Fondo oscuro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+/* Footer - Modo Claro */
+.main-footer {
+  background-color: #90C074; /* Verde */
+  color: #ffffff; /* Texto blanco */
+  padding: 20px;
+  width: 100%; /* Ocupa todo el ancho */
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.main-footer a {
+  color: #ffffff; /* Enlaces blancos */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.main-footer a:hover {
+  color: #d4dad1; /* Color más claro al pasar el mouse */
+}
+
+/* Footer - Modo Oscuro */
+.app-container.dark-mode .main-footer {
+  background-color: #121212; /* Negro */
+  color: #e0e0e0; /* Texto claro */
+}
+
+.app-container.dark-mode .main-footer a {
+  color: #e0e0e0; /* Enlaces claros */
+}
+
+.app-container.dark-mode .main-footer a:hover {
+  color: #ffffff; /* Enlaces blancos al pasar el mouse */
+}

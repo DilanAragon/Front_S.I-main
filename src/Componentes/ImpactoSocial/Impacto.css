@@ -1,0 +1,356 @@
+
+.impacto-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+  
+.impacto-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+  
+.impacto-header h1 {
+    color: #4caf50;
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+  
+.impacto-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+  
+.filter-section {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #eee;
+    max-width: 300px;
+    text-align: left;
+}
+  
+.filters-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px;
+    margin-top: 5px;
+}
+  
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+}
+  
+.filter-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+  
+.filter-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+}
+  
+.reset-button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    align-self: flex-end;
+    margin-top: 24px;
+    transition: background-color 0.3s;
+}
+  
+.reset-button:hover {
+    background-color: #3d8b40;
+}
+  
+.impacto-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+  
+.impacto-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: white;
+    font-size: 14px;
+    overflow: hidden;
+}
+  
+.impacto-table th {
+    padding: 16px 15px;
+    text-align: left;
+    background: linear-gradient(to bottom, #4caf50, #3d8b40);
+    color: white;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border-bottom: none;
+}
+  
+.impacto-table th:first-child {
+    border-top-left-radius: 8px;
+}
+  
+.impacto-table th:last-child {
+    border-top-right-radius: 8px;
+}
+  
+.impacto-table td {
+    padding: 14px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eaeaea;
+    color: #333;
+    vertical-align: middle;
+}
+
+.impacto-table td.fecha-cell {
+    white-space: nowrap;
+  }
+  .year-cell {
+    white-space: nowrap;
+  }
+    
+  
+.proyecto-row {
+    transition: all 0.2s ease;
+}
+  
+.proyecto-row:hover {
+    background-color: #f0f9f0;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+  
+.proyecto-row:nth-child(even) {
+    background-color: #f8fbf8;
+}
+  
+.name-cell {
+    font-weight: 600;
+    color: #2e7d32;
+}
+  
+.status-cell {
+    text-align: center;
+}
+  
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+  
+.status-employed { /* completed */
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    color: #2e7d32;
+    border-left: 3px solid #2e7d32;
+}
+  
+.status-studying { /* in_progress */
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    color: #1565c0;
+    border-left: 3px solid #1565c0;
+}
+  
+.status-searching { /* planned */
+    background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+    color: #e65100;
+    border-left: 3px solid #e65100;
+}
+  
+.contact-cell button {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    background: linear-gradient(to bottom, #4caf50, #43a047);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+  
+.contact-cell button:hover {
+    background: linear-gradient(to bottom, #43a047, #388e3c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+  
+.no-results {
+    text-align: center;
+    padding: 40px;
+    font-style: italic;
+    color: #666;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px dashed #ccc;
+    margin: 20px 0;
+}
+
+
+.alert-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #f44336; 
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.alert-container.show {
+  display: block;
+  opacity: 1;
+}
+
+.alert-container .alert-message {
+  margin-right: 15px;
+}
+
+.alert-container .alert-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.alert-container .alert-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.alert-container .alert-button:focus {
+  outline: none;
+}
+
+.alert-container.success {
+  background-color: #4caf50; 
+}
+
+.alert-container.error {
+  background-color: #f44336; 
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filters-container {
+    flex-direction: column;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+
+  .impacto-table th,
+  .impacto-table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .status-badge {
+    padding: 3px 8px;
+    font-size: 0.7rem;
+  }
+
+  .contact-cell button {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .modal-content h2 {
+    margin-bottom: 1rem;
+    color: #4caf50; 
+    text-align: center;
+  }
+
+  .modal-content p {
+    margin: 0.5rem 0;
+    text-align: left;
+  }
+
+  
+  
+  .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: #c0392b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .close-modal:hover {
+    background: #e74c3c;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }

@@ -1,0 +1,419 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .galeriaContainer {
+    width: 100%;
+    background-color: #f9f9f9;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+  }
+  
+  .tituloBarra {
+    background-color: #4a9d5c;
+    color: white;
+    padding: 18px 25px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .tituloBarra h2 {
+    margin: 0;
+    font-size: 1.8em;
+    font-weight: 600;
+  }
+  
+  .contenido {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  /* Sección de navegación por pestañas */
+  .seccionEventos {
+    margin-bottom: 35px;
+    display: flex; /* Añadimos flexbox al contenedor de la sección */
+    flex-direction: column; /* Aseguramos que los elementos internos se apilen verticalmente */
+    align-items: center; /* Centramos horizontalmente los elementos hijos */
+  }
+  
+  .seccionEventos h3 {
+    color: #4a9d5c;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+    text-align: center; /* Centramos el texto del título */
+  }
+  
+  .seccionEventos h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%; /* Posicionamos el inicio de la línea en el centro */
+    transform: translateX(-50%); /* Centramos la línea */
+    width: 60px;
+    height: 3px;
+    background-color: #4a9d5c;
+    border-radius: 2px;
+  }
+  
+  .singleCarouselContainer { /* Nuevo nombre para el contenedor del carrusel individual */
+    position: relative;
+    overflow: hidden;
+    padding: 10px 0;
+    margin: 0 -10px;
+    width: 100%; /* Aseguramos que el contenedor ocupe todo el ancho disponible */
+    display: flex; /* Usamos flexbox para controlar la disposición interna */
+    justify-content: center; /* Centramos horizontalmente el contenido */
+    align-items: center; /* Centramos verticalmente el contenido (por si acaso) */
+  }
+  
+  .carouselBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(74, 157, 92, 0.8);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  }
+  
+  .carouselBtn:hover {
+    opacity: 1;
+  }
+  
+  .prevBtn {
+    left: 10px;
+  }
+  
+  .nextBtn {
+    right: 10px;
+  }
+  
+  .singleEventoContainer { /* Nuevo nombre para el contenedor del evento individual */
+    display: flex; /* Usamos flexbox para centrar el contenido */
+    justify-content: center; /* Centramos horizontalmente */
+    align-items: center; /* Centramos verticalmente */
+    width: 100%; /* Aseguramos que ocupe el ancho del contenedor padre */
+  }
+  
+  .eventoSlide {
+    /* Mantenemos la lógica de mostrar/ocultar con activeSlide */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    position: absolute;
+    width: 100%; /* Aseguramos que ocupe el ancho del contenedor padre */
+  }
+  
+  .eventoSlide.activeSlide {
+    opacity: 1;
+    position: static; /* Para que ocupe su lugar en el centro */
+  }
+  
+  .eventoCard {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
+    background-color: white;
+    max-width: 350px; /* Ajusta este valor si necesitas un ancho máximo */
+    width: 100%; /* Asegura que no se desborde de su contenedor centrado */
+  }
+  
+  .eventoCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .eventoCard a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .eventoImagen {
+    width: 100%;
+    height: auto; /* Ajustamos la altura para mantener la proporción */
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+    transition: transform 0.5s;
+  }
+  
+  .eventoCard:hover .eventoImagen {
+    transform: scale(1.05);
+  }
+  
+  .eventoInfo {
+    padding: 15px;
+    text-align: center; /* Centramos el texto de la información */
+  }
+  
+  .eventoTitulo {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .eventoFecha {
+    color: #666;
+    font-size: 0.9em;
+    margin-top: 5px;
+  }
+  
+  .carouselIndicators {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 8px;
+  }
+  
+  .indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ddd;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    transition: background-color 0.3s ease;
+  }
+  
+  .indicator.activeIndicator {
+    background-color: #4a9d5c;
+  }
+  
+  /* Sección de Fotos */
+  .seccionFotos {
+    margin-bottom: 35px;
+  }
+  
+  .seccionFotos h3 {
+    color: #4a9d5c;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  .seccionFotos h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: #4a9d5c;
+    border-radius: 2px;
+  }
+  
+  .gridImagenes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .imagenWrapper {
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .imagenGaleria {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+  }
+  
+  .imagenWrapper:hover .imagenGaleria {
+    transform: scale(1.08);
+  }
+  
+  .imagenOverlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .imagenWrapper:hover .imagenOverlay {
+    opacity: 1;
+  }
+  
+  /* Sección de Videos */
+  .seccionVideos {
+    margin-bottom: 35px;
+  }
+  
+  .seccionVideos h3 {
+    color: #4a9d5c;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 10px;
+  }
+  
+  .seccionVideos h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: #4a9d5c;
+    border-radius: 2px;
+  }
+  
+  .videoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 25px;
+  }
+  
+  .videoItem {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+  }
+  
+  .videoItem:hover {
+    transform: translateY(-5px);
+  }
+  
+  .videoItemHeader {
+    padding: 15px;
+    background-color: #4a9d5c;
+    color: white;
+  }
+  
+  .videoItemHeader h4 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .videoContainer {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* Proporción 16:9 */
+    height: 0;
+    overflow: hidden;
+  }
+  
+  .videoContainer iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+  
+  .videoInfo {
+    padding: 15px;
+  }
+  
+  .videoInfo p {
+    margin: 0;
+    color: #666;
+    font-size: 0.95em;
+  }
+  
+  /* Animaciones */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Consultas de medios para respuesta */
+  @media (max-width: 1200px) {
+    .videoGrid {
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .galeriaContainer {
+      padding: 15px;
+    }
+  
+    .tituloBarra {
+      padding: 15px;
+    }
+  
+    .tituloBarra h2 {
+      font-size: 1.5em;
+    }
+  
+    .tabNav {
+      flex-wrap: wrap;
+    }
+  
+    .tabButton {
+      min-width: 110px;
+      font-size: 14px;
+      padding: 8px 15px;
+    }
+  
+    .gridImagenes {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
+    }
+  
+    .imagenGaleria {
+      height: 150px;
+    }
+  
+    .videoGrid {
+      grid-template-columns: 1fr;
+    }
+  
+    .materialesGrid {
+      grid-template-columns: 1fr;
+    }
+  
+    .eventoCard {
+      min-width: 250px;
+      max-width: 250px;
+    }
+  }
