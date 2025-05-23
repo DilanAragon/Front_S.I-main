@@ -41,10 +41,13 @@
   
   /* Sección de navegación por pestañas */
   .seccionEventos {
-    margin-bottom: 35px;
-    display: flex; /* Añadimos flexbox al contenedor de la sección */
-    flex-direction: column; /* Aseguramos que los elementos internos se apilen verticalmente */
-    align-items: center; /* Centramos horizontalmente los elementos hijos */
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    padding: 32px 24px 24px 24px;
+    position: relative;
   }
   
   .seccionEventos h3 {
@@ -69,141 +72,224 @@
     border-radius: 2px;
   }
   
+  .eventosHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  
+  .eventosHeader h3 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  .pauseButton {
+    background: #f1c40f;
+    border: none;
+    color: #222;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 7px 18px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .pauseButton:hover {
+    background: #f39c12;
+  }
+  
   .singleCarouselContainer { /* Nuevo nombre para el contenedor del carrusel individual */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    overflow: hidden;
-    padding: 10px 0;
-    margin: 0 -10px;
-    width: 100%; /* Aseguramos que el contenedor ocupe todo el ancho disponible */
-    display: flex; /* Usamos flexbox para controlar la disposición interna */
-    justify-content: center; /* Centramos horizontalmente el contenido */
-    align-items: center; /* Centramos verticalmente el contenido (por si acaso) */
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    overflow-y: hidden; /* Oculta la barra de scroll vertical solo en el carrusel */
   }
   
   .carouselBtn {
-    position: absolute;
+    position: absolute;         /* Antes: fixed */
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(74, 157, 92, 0.8);
-    color: white;
+    opacity: 0.7;
+    z-index: 10;
+    background: rgba(44, 62, 80, 0.45);
+    color: #fff;
     border: none;
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    font-size: 2.2rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s, opacity 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    z-index: 2;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    opacity: 0.7;
-    transition: opacity 0.3s;
+  }
+  .prevBtn {
+    left: 24px;
+    right: auto;
+    margin: 0;
+  }
+  .nextBtn {
+    right: 24px;
+    left: auto;
+    margin: 0;
   }
   
   .carouselBtn:hover {
+    background: rgba(41, 128, 185, 0.85);
     opacity: 1;
+    transform: scale(1.1) translateY(-50%);
   }
   
-  .prevBtn {
-    left: 10px;
-  }
-  
-  .nextBtn {
-    right: 10px;
+  /* Opcional: Oculta las flechas en móvil */
+  @media (max-width: 768px) {
+    .carouselBtn {
+      display: none;
+    }
   }
   
   .singleEventoContainer { /* Nuevo nombre para el contenedor del evento individual */
-    display: flex; /* Usamos flexbox para centrar el contenido */
-    justify-content: center; /* Centramos horizontalmente */
-    align-items: center; /* Centramos verticalmente */
-    width: 100%; /* Aseguramos que ocupe el ancho del contenedor padre */
+    width: 100%;
+    max-width: 1500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 340px;
+    position: relative;
+    margin: 0;
+    padding: 0;
   }
   
   .eventoSlide {
     /* Mantenemos la lógica de mostrar/ocultar con activeSlide */
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.7s cubic-bezier(.4,0,.2,1);
     position: absolute;
-    width: 100%; /* Aseguramos que ocupe el ancho del contenedor padre */
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
   }
-  
-  .eventoSlide.activeSlide {
+  .activeSlide {
     opacity: 1;
-    position: static; /* Para que ocupe su lugar en el centro */
+    position: relative;
+    pointer-events: auto;
   }
   
   .eventoCard {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
+    width: 100%;
+    max-width: 1500px;
+    min-width: 0;
+    height: 650px; /* Aumenta la altura del carrusel */
+    margin: 0 auto;
+    background: transparent; /* <-- Cambia esto */
+    border-radius: 24px; /* Más marco */
+    box-shadow: 0 4px 24px rgba(0,0,0,0.25); /* Sombra más notoria */
     overflow: hidden;
-    background-color: white;
-    max-width: 350px; /* Ajusta este valor si necesitas un ancho máximo */
-    width: 100%; /* Asegura que no se desborde de su contenedor centrado */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 8px solid #fff; /* Marco blanco grueso */
   }
-  
-  .eventoCard:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  }
-  
-  .eventoCard a {
-    display: block;
+  .eventoCardA {
     text-decoration: none;
     color: inherit;
+    display: block;
   }
   
+  .eventoImageContainer {
+    width: 100%;
+    height: 100%;
+    min-height: 650px; /* Igual que .eventoCard */
+    overflow: hidden;
+    background: transparent;     /* Fondo transparente para que no tape la imagen */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 0;
+    box-shadow: none;
+  }
   .eventoImagen {
     width: 100%;
-    height: auto; /* Ajustamos la altura para mantener la proporción */
+    height: 100%;
     object-fit: cover;
-    border-radius: 10px 10px 0 0;
-    transition: transform 0.5s;
+    object-position: center;
+    transition: transform 0.4s;
+    display: block;
+    aspect-ratio: unset;
+    max-width: unset;
+    max-height: unset;
+    border-radius: 0;
+    box-shadow: none;
   }
-  
-  .eventoCard:hover .eventoImagen {
+  .eventoCardA:hover .eventoImagen {
     transform: scale(1.05);
   }
   
+  /* Oculta la info por defecto y la muestra solo en hover */
   .eventoInfo {
-    padding: 15px;
-    text-align: center; /* Centramos el texto de la información */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(0deg, rgba(44,62,80,0.85) 80%, transparent 100%);
+    color: #fff;
+    padding: 30px 16px 18px 16px;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
   }
-  
+
+  .eventoCardA:hover .eventoInfo {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
   .eventoTitulo {
-    font-weight: bold;
-    font-size: 1.1em;
-    color: #333;
-    margin-bottom: 8px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
   }
-  
+
   .eventoFecha {
-    color: #666;
-    font-size: 0.9em;
-    margin-top: 5px;
+    font-size: 1.08rem;
+    color: #e0e0e0;
   }
   
+  /* Indicadores debajo de la imagen */
   .carouselIndicators {
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    align-items: center;
+    margin-top: 10px;
     gap: 8px;
+    width: 100%;
+    order: 2;
   }
   
   .indicator {
-    width: 10px;
-    height: 10px;
+    width: 13px;
+    height: 13px;
     border-radius: 50%;
-    background-color: #ddd;
+    background: #d0d3d4;
     cursor: pointer;
-    border: none;
-    padding: 0;
-    transition: background-color 0.3s ease;
+    transition: background 0.2s, transform 0.2s;
+    border: 2px solid transparent;
   }
-  
-  .indicator.activeIndicator {
-    background-color: #4a9d5c;
+  .activeIndicator {
+    background: #2980b9;
+    border-color: #2980b9;
+    transform: scale(1.15);
   }
   
   /* Sección de Fotos */
@@ -414,7 +500,155 @@
     }
   
     .eventoCard {
-      min-width: 250px;
-      max-width: 250px;
+      width: 99vw;
+      max-width: 99vw;
+      height: 220px;
     }
+    .eventoImageContainer {
+      min-height: 220px;
+      height: 220px;
+    }
+    .eventoInfo {
+      opacity: 1;
+      background: linear-gradient(0deg, rgba(44,62,80,0.85) 80%, transparent 100%);
+      pointer-events: auto;
+    }
+  }
+
+  /* --- RESPONSIVE AJUSTADO PARA EVENTOS Y GALERÍA --- */
+
+  /* Carrusel y eventos */
+  @media (max-width: 1200px) {
+    .eventoCard {
+      height: 350px;
+    }
+    .eventoImageContainer {
+      min-height: 350px;
+      height: 350px;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .eventoCard {
+      width: 98vw;
+      max-width: 98vw;
+      height: 220px;
+    }
+    .eventoImageContainer {
+      min-height: 220px;
+      height: 220px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .singleCarouselContainer,
+    .singleEventoContainer {
+      width: 100%;
+      max-width: 100%;
+      padding: 0;
+    }
+    .eventoCard {
+      width: 100%;
+      max-width: 100%;
+      height: 180px;
+      border-radius: 0;
+    }
+    .eventoImageContainer {
+      min-height: 180px;
+      height: 180px;
+      border-radius: 0;
+    }
+    .eventoTitulo {
+      font-size: 1rem;
+    }
+    .eventoFecha {
+      font-size: 0.9rem;
+    }
+    .carouselIndicators {
+      gap: 5px;
+    }
+  }
+  
+  /* Galería de imágenes */
+  @media (max-width: 900px) {
+    .gridImagenes {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .imagenGaleria {
+      height: 120px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .gridImagenes {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .imagenGaleria {
+      height: 90px;
+    }
+  }
+  
+  /* Videos */
+  @media (max-width: 1200px) {
+    .videoGrid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .videoGrid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .videoItem {
+      min-width: 0;
+    }
+  }
+  
+  /* Ajustes generales */
+  @media (max-width: 900px) {
+    .galeriaContainer {
+      padding: 8px;
+      border-radius: 0;
+    }
+    .tituloBarra {
+      padding: 10px;
+      font-size: 1.1em;
+      border-radius: 0;
+    }
+    .seccionEventos,
+    .seccionFotos,
+    .seccionVideos {
+      max-width: 100vw;
+      margin: 10px 0;
+      padding: 10px 0 0 0;
+      border-radius: 0;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .galeriaContainer {
+      padding: 2px;
+    }
+    .tituloBarra {
+      padding: 6px;
+      font-size: 1em;
+    }
+    .seccionEventos,
+    .seccionFotos,
+    .seccionVideos {
+      padding: 6px 0 0 0;
+    }
+  }
+
+  ::-webkit-scrollbar-button {
+    display: none !important;
+  }
+
+  /* También puedes ocultar completamente la barra de scroll horizontal si no la necesitas: */
+  body, .galeriaContainer, .singleCarouselContainer {
+    overflow-x: hidden;
   }
