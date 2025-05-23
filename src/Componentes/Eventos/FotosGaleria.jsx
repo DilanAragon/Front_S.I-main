@@ -1,55 +1,65 @@
 import React, { useState } from 'react';
 import styles from './GaleriaMultimedia.module.css';
 
+import foto1 from '../../assets/foto1.jpg';
+import foto2 from '../../assets/foto2.jpg';
+import foto3 from '../../assets/foto3.jpg';
+import foto4 from '../../assets/foto4.jpg';
+import foto5 from '../../assets/foto5.jpg';
+import foto6 from '../../assets/foto6.jpg';
+import foto7 from '../../assets/foto7.jpg';
+import foto8 from '../../assets/foto8.jpg';
+
+
 function FotosGaleria() {
   const [imagenes] = useState([
-    { 
-      id: 1, 
-      url: '/assets/eventos/foto1.jpg', 
-      alt: 'Ceremonia de Graduación', 
-      descripcion: 'Ceremonia de Graduación 2024' 
+    {
+      id: 1,
+      url: foto1, // ¡Uso la variable importada!
+      alt: 'Ceremonia de Graduación',
+      descripcion: 'Ceremonia de Graduación 2024'
     },
-    { 
-      id: 2, 
-      url: '/assets/eventos/foto2.jpg', 
-      alt: 'Conferencia Internacional', 
-      descripcion: 'Conferencia Internacional de Innovación' 
+    {
+      id: 2,
+      url: foto2, // ¡Uso la variable importada!
+      alt: 'Conferencia Internacional',
+      descripcion: 'Conferencia Internacional de Innovación'
     },
-    { 
-      id: 3, 
-      url: '/assets/eventos/foto3.jpg', 
-      alt: 'Taller de Emprendimiento', 
-      descripcion: 'Taller de Emprendimiento Sostenible' 
+    {
+      id: 3,
+      url: foto3, // ¡Uso la variable importada!
+      alt: 'Taller de Emprendimiento',
+      descripcion: 'Taller de Emprendimiento Sostenible'
     },
-    { 
-      id: 4, 
-      url: '/assets/eventos/foto4.jpg', 
-      alt: 'Feria de Proyectos', 
-      descripcion: 'Feria de Proyectos Estudiantiles' 
+    {
+      id: 4,
+      url: foto4, // ¡Uso la variable importada!
+      alt: 'Feria de Proyectos',
+      descripcion: 'Feria de Proyectos Estudiantiles'
     },
-    { 
-      id: 5, 
-      url: '/assets/eventos/foto5.jpg', 
-      alt: 'Actividad Deportiva', 
-      descripcion: 'Torneo Deportivo Interuniversitario' 
+    {
+      id: 5,
+      url: foto5, // ¡Uso la variable importada!
+      alt: 'Actividad Deportiva',
+      descripcion: 'Torneo Deportivo Interuniversitario'
     },
-    { 
-      id: 6, 
-      url: '/assets/eventos/foto6.jpg', 
-      alt: 'Concierto Benéfico', 
-      descripcion: 'Concierto Benéfico Anual' 
+    {
+      id: 6,
+      url: foto6, // ¡Uso la variable importada!
+      alt: 'Concierto Benéfico',
+      descripcion: 'Concierto Benéfico Anual'
     },
-    { 
-      id: 7, 
-      url: '/assets/eventos/foto7.jpg', 
-      alt: 'Seminario Tecnológico', 
-      descripcion: 'Seminario de Nuevas Tecnologías' 
+    {
+      id: 7,
+      url: foto7, // ¡Uso la variable importada!
+      alt: 'Seminario Tecnológico',
+      descripcion: 'Seminario de Nuevas Tecnologías'
     },
-    { 
-      id: 8, 
-      url: '/assets/eventos/foto8.jpg', 
-      alt: 'Voluntariado Comunitario', 
-      descripcion: 'Jornada de Voluntariado Comunitario' 
+    {
+      id: 8,
+      url: foto8, // ¡Uso la variable importada!
+      alt: 'Voluntariado Comunitario',
+      descripcion: 'Jornada de Voluntariado Comunitario'
     },
   ]);
 
@@ -66,16 +76,16 @@ function FotosGaleria() {
   return (
     <div className={styles.seccionFotos}>
       <h3>Fotografías de Eventos y Actividades</h3>
-      
+
       <div className={styles.gridImagenes}>
         {imagenes.map(img => (
-          <div 
-            key={img.id} 
+          <div
+            key={img.id}
             className={styles.imagenWrapper}
             onClick={() => openImage(img)}
           >
             <img
-              src={img.url}
+              src={img.url} // Aquí se usa la URL correcta generada por la importación
               alt={img.alt}
               className={styles.imagenGaleria}
             />
@@ -87,7 +97,7 @@ function FotosGaleria() {
       </div>
 
       {selectedImage && (
-        <div 
+        <div
           style={{
             position: 'fixed',
             top: 0,
@@ -104,7 +114,7 @@ function FotosGaleria() {
           }}
           onClick={closeImage}
         >
-          <div 
+          <div
             style={{
               maxWidth: '90%',
               maxHeight: '90%',
@@ -112,8 +122,8 @@ function FotosGaleria() {
             }}
             onClick={e => e.stopPropagation()}
           >
-            <img 
-              src={selectedImage.url} 
+            <img
+              src={selectedImage.url} // Aquí también se usa la URL correcta
               alt={selectedImage.alt}
               style={{
                 maxWidth: '100%',
@@ -123,7 +133,7 @@ function FotosGaleria() {
                 boxShadow: '0 5px 15px rgba(0, 0, 0, 0.3)'
               }}
             />
-            <div 
+            <div
               style={{
                 backgroundColor: 'white',
                 padding: '15px',
@@ -134,7 +144,7 @@ function FotosGaleria() {
               <h4 style={{ margin: '0 0 5px 0' }}>{selectedImage.alt}</h4>
               <p style={{ margin: 0, color: '#666' }}>{selectedImage.descripcion}</p>
             </div>
-            <button 
+            <button
               style={{
                 position: 'absolute',
                 top: '10px',
