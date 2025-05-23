@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Papa from "papaparse";
-import "./Impacto.css"; 
+import "./Impacto.css";
 
 const ImpactoSocial = () => {
   const [proyectos, setProyectos] = useState([]);
@@ -35,11 +35,35 @@ const ImpactoSocial = () => {
     }
   };
 
+  const resetFilters = () => {
+    setFilterStatus("");
+    setFilteredProyectos(proyectos);
+  };
+
+  const exportToCSV = () => {
+    const csv = Papa.unparse(filteredProyectos);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "impacto_social_export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const statusClass = (status) => {
     if (status === "completed") return "status-employed";
     if (status === "in_progress") return "status-studying";
     if (status === "planned") return "status-searching";
     return "";
+  };
+
+  const statusLabel = (status) => {
+    if (status === "completed") return "Completado";
+    if (status === "in_progress") return "En progreso";
+    if (status === "planned") return "Planificado";
+    return status;
   };
 
   const handleVerMasClick = (proyecto) => {
@@ -75,8 +99,11 @@ const ImpactoSocial = () => {
               <option value="planned">Planificado</option>
             </select>
           </div>
-          <button className="reset-button" onClick={() => setFilteredProyectos(proyectos)}>
+          <button className="reset-button" onClick={resetFilters}>
             Resetear Filtros
+          </button>
+          <button className="export-button" onClick={exportToCSV}>
+            Exportar CSV
           </button>
         </div>
       </div>
@@ -107,13 +134,7 @@ const ImpactoSocial = () => {
                   <td className="year-cell">{proyecto.endDate}</td>
                   <td className="status-cell">
                     <span className={`status-badge ${statusClass(proyecto.status)}`}>
-                      {proyecto.status === "completed"
-                        ? "Completado"
-                        : proyecto.status === "in_progress"
-                        ? "En progreso"
-                        : proyecto.status === "planned"
-                        ? "Planificado"
-                        : proyecto.status}
+                      {statusLabel(proyecto.status)}
                     </span>
                   </td>
                   <td className="contact-cell">

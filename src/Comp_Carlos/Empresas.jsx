@@ -1,85 +1,189 @@
 import React, { useEffect, useState } from 'react';
 import Papa from 'papaparse';
 import DataTable from 'react-data-table-component';
-import './Empresas.css'; // Asegúrate de tener este archivo CSS para los estilos
+import './Empresas.css';
+
 const Empresas = () => {
+  // Estados
   const [empresas, setEmpresas] = useState([]);
   const [filtro, setFiltro] = useState('');
+  const [ciudadFiltro, setCiudadFiltro] = useState('');
+  const [sectorFiltro, setSectorFiltro] = useState('');
   const [empresasFiltradas, setEmpresasFiltradas] = useState([]);
-  const [mostrarBeneficios, setMostrarBeneficios] = useState(false);
+  const [ciudadesUnicas, setCiudadesUnicas] = useState([]);
+  const [sectoresUnicos, setSectoresUnicos] = useState([]);
 
+  // Efectos
   useEffect(() => {
-    Papa.parse('/empresas_reales.csv', {
-      download: true,
-      header: true,
-      complete: (results) => {
-        const datosLimpios = results.data.filter(row => Object.values(row).some(v => v));
-        setEmpresas(datosLimpios);
-        setEmpresasFiltradas(datosLimpios);
-      },
-    });
+    const cargarDatos = async () => {
+      Papa.parse('/empresas_reales.csv', {
+        download: true,
+        header: true,
+        complete: (results) => {
+          const datosLimpios = results.data.filter(row => 
+            Object.values(row).some(Boolean)
+          );
+          
+          setEmpresas(datosLimpios);
+          setEmpresasFiltradas(datosLimpios);
+          
+          // Extraer valores únicos
+          const ciudades = [...new Set(datosLimpios.map(e => e.Ciudad).filter(Boolean))].sort();
+          const sectores = [...new Set(datosLimpios.map(e => e.Sector).filter(Boolean))].sort();
+          
+          setCiudadesUnicas(ciudades);
+          setSectoresUnicos(sectores);
+        }
+      });
+    };
+    
+    cargarDatos();
   }, []);
 
   useEffect(() => {
-    const datosFiltrados = empresas.filter((empresa) =>
-      Object.values(empresa).some((valor) =>
-        valor?.toString().toLowerCase().includes(filtro.toLowerCase())
-      )
-    );
-    setEmpresasFiltradas(datosFiltrados);
-  }, [filtro, empresas]);
+    const aplicarFiltros = () => {
+      const filtroLower = filtro.toLowerCase();
+      const ciudadLower = ciudadFiltro.toLowerCase();
+      const sectorLower = sectorFiltro.toLowerCase();
 
-  const columns = [
-    { name: 'Nombre', selector: row => row['Nombre'], sortable: true, wrap: true },
-    { name: 'Sector', selector: row => row['Sector'], sortable: true },
-    { name: 'Ciudad', selector: row => row['Ciudad'], sortable: true },
-    { name: 'Teléfono', selector: row => row['Teléfono'] },
-    { name: 'Correo', selector: row => row['Correo'] },
+      return empresas.filter(empresa => {
+        const nombre = empresa.Nombre?.toLowerCase() || '';
+        const ciudad = empresa.Ciudad?.toLowerCase() || '';
+        const sector = empresa.Sector?.toLowerCase() || '';
+
+        return (
+          (nombre.includes(filtroLower) || 
+           ciudad.includes(filtroLower) || 
+           sector.includes(filtroLower)) &&
+          (!ciudadFiltro || ciudad === ciudadLower) &&
+          (!sectorFiltro || sector === sectorLower)
+        );
+      });
+    };
+
+    setEmpresasFiltradas(aplicarFiltros());
+  }, [filtro, ciudadFiltro, sectorFiltro, empresas]);
+
+  // Handlers
+  const manejarExportacion = () => {
+    const csv = Papa.unparse(empresasFiltradas);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const enlace = document.createElement('a');
+    enlace.href = url;
+    enlace.setAttribute('download', 'empresas_filtradas.csv');
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
+  };
+
+  const limpiarFiltros = () => {
+    setFiltro('');
+    setCiudadFiltro('');
+    setSectorFiltro('');
+  };
+
+  // Configuración de columnas
+  const columnas = [
+    { name: 'Nombre', selector: row => row.Nombre, sortable: true, wrap: true },
+    { name: 'Sector', selector: row => row.Sector, sortable: true },
+    { name: 'Ciudad', selector: row => row.Ciudad, sortable: true },
+    { name: 'Teléfono', selector: row => row.Teléfono },
+    { name: 'Correo', selector: row => row.Correo },
     {
       name: 'Sitio Web',
-      selector: row => row['Sitio Web'],
       cell: row => (
-        <a href={row['Sitio Web']} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+        <a
+          href={row['Sitio Web']}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="enlace-empresa"
+        >
           Visitar
         </a>
       ),
       ignoreRowClick: true,
-      allowOverflow: true,
       button: true,
     },
-    { name: 'Contacto', selector: row => row['Contacto'] },
+    { name: 'Contacto', selector: row => row.Contacto },
   ];
 
   return (
-    <div className="p-6 w-full">
-      {/* Título */}
-      <h1 className="text-3xl font-bold text-green-700 text-center mb-6">Empresas Aliadas</h1>
+    <div className="contenedor-principal">
+      <header className="cabecera-seccion">
+        <h1>Directorio de Empresas</h1>
+      </header>
 
-      {/* Filtro + Botón */}
-      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-center">
-        <input
-          type="text"
-          placeholder="Buscar empresa, sector, ciudad..."
-          value={filtro}
-          onChange={(e) => setFiltro(e.target.value)}
-          className="border border-gray-300 rounded text-sm w-full sm:w-96 h-10 px-3"
+      <section className="controles-filtros">
+        <div className="grupo-filtro">
+          <input
+            type="search"
+            placeholder="Buscar por nombre, ciudad o sector..."
+            value={filtro}
+            onChange={e => setFiltro(e.target.value)}
+            className="entrada-busqueda"
+          />
+        </div>
+
+        <div className="grupo-filtro">
+          <select
+            value={ciudadFiltro}
+            onChange={e => setCiudadFiltro(e.target.value)}
+            className="selector-filtro"
+          >
+            <option value="">Todas las ciudades</option>
+            {ciudadesUnicas.map(ciudad => (
+              <option key={ciudad} value={ciudad}>{ciudad}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="grupo-filtro">
+          <select
+            value={sectorFiltro}
+            onChange={e => setSectorFiltro(e.target.value)}
+            className="selector-filtro"
+          >
+            <option value="">Todos los sectores</option>
+            {sectoresUnicos.map(sector => (
+              <option key={sector} value={sector}>{sector}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="contenedor-botones">
+          <button 
+            onClick={limpiarFiltros}
+            className="boton-secundario"
+          >
+            Reiniciar Filtros
+          </button>
+          
+          <button 
+            onClick={manejarExportacion}
+            className="boton-primario"
+          >
+            Exportar Datos
+          </button>
+        </div>
+      </section>
+
+      <section className="tabla-datos">
+        <DataTable
+          columns={columnas}
+          data={empresasFiltradas}
+          pagination
+          responsive
+          highlightOnHover
+          striped
+          noDataComponent={
+            <div className="sin-resultados">
+              No se encontraron empresas con los criterios actuales
+            </div>
+          }
         />
-
-      </div>
-
-      
-
-
-      {/* Tabla */}
-      <DataTable
-        columns={columns}
-        data={empresasFiltradas}
-        pagination
-        highlightOnHover
-        striped
-        responsive
-        noDataComponent="No se encontraron resultados"
-      />
+      </section>
     </div>
   );
 };

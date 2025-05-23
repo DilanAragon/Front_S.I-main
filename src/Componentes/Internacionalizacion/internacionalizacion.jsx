@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Papa from "papaparse";
 import axios from "axios";
-import "./internacionalizacion.css"; // reutilizamos el estilo existente
+import "./internacionalizacion.css";
 
 const Internacionalizacion = () => {
   const [relaciones, setRelaciones] = useState([]);
@@ -13,7 +13,6 @@ const Internacionalizacion = () => {
   const [flagUrls, setFlagUrls] = useState({});
 
   useEffect(() => {
- 
     Papa.parse("/relaciones_internacionales.csv", {
       download: true,
       header: true,
@@ -21,7 +20,6 @@ const Internacionalizacion = () => {
       complete: (results) => {
         setRelaciones(results.data);
         setFilteredRelaciones(results.data);
-       
         fetchFlags(results.data);
       },
       error: (error) => {
@@ -31,7 +29,6 @@ const Internacionalizacion = () => {
   }, []);
 
   const fetchFlags = (relaciones) => {
-   
     const countries = relaciones.map((r) => r.country);
     const uniqueCountries = [...new Set(countries)];
 
@@ -42,7 +39,7 @@ const Internacionalizacion = () => {
           const response = await axios.get(
             `https://flagcdn.com/w320/${country.toLowerCase()}.png`
           );
-          flags[country] = response.request.responseURL; 
+          flags[country] = response.request.responseURL;
         } catch (error) {
           console.error(`Error al obtener bandera de ${country}:`, error);
         }
@@ -90,6 +87,18 @@ const Internacionalizacion = () => {
     setFilterStatus("");
     setFilterType("");
     setFilteredRelaciones(relaciones);
+  };
+
+  const exportToCSV = () => {
+    const csv = Papa.unparse(filteredRelaciones);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "relaciones_internacionales_export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const statusClass = (status) => {
@@ -165,6 +174,9 @@ const Internacionalizacion = () => {
           </div>
           <button className="reset-button" onClick={resetFilters}>
             Restablecer
+          </button>
+          <button className="export-button" onClick={exportToCSV}>
+            Exportar CSV
           </button>
         </div>
       </div>
