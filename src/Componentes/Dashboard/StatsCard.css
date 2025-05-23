@@ -47,3 +47,29 @@
   margin: 5px 0 0;
   font-size: 14px;
 }
+
+/* Modo oscuro para StatsCard */
+.app-container.dark-mode .stats-card {
+  background: #23272f;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.app-container.dark-mode .stats-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.app-container.dark-mode .stats-icon {
+  background-color: rgba(129, 199, 132, 0.15);
+}
+
+.app-container.dark-mode .stats-icon i {
+  color: #81c784;
+}
+
+.app-container.dark-mode .stats-info h3 {
+  color: #e0e0e0;
+}
+
+.app-container.dark-mode .stats-info p {
+  color: #bdbdbd;
+}

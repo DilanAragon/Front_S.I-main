@@ -37,7 +37,19 @@ const Testimonios = ({ testimonios }) => {
             >
               <div className="testimonio-header">
                 <div className="testimonio-imagen">
-                  <img src={testimonio.imagen} alt={testimonio.nombre} />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="placeholder-icon"
+                    viewBox="0 0 24 24"
+                    width="48"
+                    height="48"
+                  >
+                    <path
+                      d="M12 12c2.67 0 8 1.34 8 4v2H4v-2c0-2.66 5.33-4 8-4zm0-2
+        c-1.66 0-3-1.34-3-3s1.34-3 
+        3-3 3 1.34 3 3-1.34 3-3 3z"
+                    />
+                  </svg>
                 </div>
                 <div className="testimonio-info">
                   <h3>{testimonio.nombre}</h3>

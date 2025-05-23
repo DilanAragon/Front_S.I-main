@@ -859,3 +859,86 @@ label.dark-mode {
 .app-container.dark-mode label {
   color: #ffffff; /* Texto blanco */
 }
+
+/* Modo oscuro para paneles de importación y ayuda */
+.app-container.dark-mode .import-container,
+.app-container.dark-mode .import-help-section,
+.app-container.dark-mode .format-example {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  box-shadow: 0 2px 6px rgba(255,255,255,0.08);
+}
+
+.app-container.dark-mode .import-container h3,
+.app-container.dark-mode .import-help-section h3,
+.app-container.dark-mode .import-info h4,
+.app-container.dark-mode .format-example h5 {
+  color: #90C074;
+}
+
+.app-container.dark-mode .import-info {
+  background-color: #23272f;
+  border-left: 4px solid #90C074;
+}
+
+.app-container.dark-mode .import-info p,
+.app-container.dark-mode .import-info code,
+.app-container.dark-mode .format-example pre,
+.app-container.dark-mode .categories-list li {
+  color: #bdbdbd;
+  background-color: #23272f;
+}
+
+.app-container.dark-mode .import-status {
+  background-color: #263238;
+  color: #90C074;
+}
+
+.app-container.dark-mode .import-status.importing {
+  background-color: #23272f;
+  color: #90caf9;
+}
+
+.app-container.dark-mode .file-label {
+  background-color: #388e3c;
+  color: #fff;
+}
+
+.app-container.dark-mode .file-label:hover {
+  background-color: #256029;
+}
+
+.app-container.dark-mode .loading-indicator {
+  color: #bdbdbd;
+}
+
+/* Fondo oscuro para todo el contenido interno del dashboard */
+.app-container.dark-mode .dashboard-content-wrapper,
+.app-container.dark-mode .data-section,
+.app-container.dark-mode .import-container,
+.app-container.dark-mode .import-help-section,
+.app-container.dark-mode .format-example {
+  background-color: #181a20 !important;
+  color: #e0e0e0 !important;
+  box-shadow: 0 2px 6px rgba(129,199,132,0.08);
+}
+
+/* Tablas internas */
+.app-container.dark-mode .data-table th,
+.app-container.dark-mode .data-table td {
+  background-color: #23272f !important;
+  color: #e0e0e0 !important;
+  border-bottom: 1px solid #333 !important;
+}
+
+/* Tarjetas estadísticas */
+.app-container.dark-mode .stat-card {
+  background-color: #23272f !important;
+  color: #e0e0e0 !important;
+}
+
+/* Gráficas */
+.app-container.dark-mode .chart-container {
+  background-color: #23272f !important;
+  color: #e0e0e0 !important;
+}

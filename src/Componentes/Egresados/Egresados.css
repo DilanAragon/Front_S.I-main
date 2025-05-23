@@ -23,9 +23,20 @@
   margin-bottom: 10px;
 }
 
+.app-container.dark-mode .egresados-header h1,
+.app-container.dark-mode h2,
+.app-container.dark-mode h3 {
+  color: #81c784;
+}
+
 .egresados-header p {
   color: #666;
   font-size: 1.1rem;
+}
+
+.app-container.dark-mode .egresados-header p,
+.app-container.dark-mode .section-description {
+  color: #bdbdbd;
 }
 
 .egresados-content-wrapper {
@@ -35,11 +46,21 @@
   overflow: hidden;
 }
 
+.app-container.dark-mode .egresados-content-wrapper {
+  background-color: #23272f;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
 .tab-nav-horizontal {
   display: flex;
   overflow-x: auto;
   background-color: #f5f5f5;
   border-bottom: 1px solid #ddd;
+}
+
+.app-container.dark-mode .tab-nav-horizontal {
+  background-color: #23272f;
+  border-bottom: 1px solid #333;
 }
 
 .tab-button {
@@ -54,8 +75,16 @@
   white-space: nowrap;
 }
 
+.app-container.dark-mode .tab-button {
+  color: #bdbdbd;
+}
+
 .tab-button:hover {
   background-color: #e0e0e0;
+}
+
+.app-container.dark-mode .tab-button:hover {
+  background-color: #181a20;
 }
 
 .tab-button.active {
@@ -65,8 +94,19 @@
   background-color: #fff;
 }
 
+.app-container.dark-mode .tab-button.active {
+  color: #81c784;
+  background-color: #23272f;
+  border-bottom: 3px solid #81c784;
+}
+
 .tab-content-container {
   padding: 30px;
+}
+
+.app-container.dark-mode .tab-content-container {
+  background-color: #23272f;
+  color: #e0e0e0;
 }
 
 .tab-content {
@@ -100,6 +140,11 @@ h3 {
   border: 1px solid #eee;
 }
 
+.app-container.dark-mode .filter-section {
+  background-color: #181a20;
+  border: 1px solid #333;
+}
+
 .filters-container {
   display: flex;
   flex-wrap: wrap;
@@ -119,6 +164,10 @@ h3 {
   color: #555;
 }
 
+.app-container.dark-mode .filter-group label {
+  color: #bdbdbd;
+}
+
 .filter-group select {
   width: 100%;
   padding: 10px;
@@ -126,6 +175,12 @@ h3 {
   border-radius: 4px;
   background-color: white;
   font-size: 14px;
+}
+
+.app-container.dark-mode .filter-group select {
+  background-color: #23272f;
+  color: #e0e0e0;
+  border: 1px solid #333;
 }
 
 .reset-button {
@@ -141,8 +196,17 @@ h3 {
   transition: background-color 0.3s;
 }
 
+.app-container.dark-mode .reset-button {
+  background-color: #388e3c;
+  color: #fff;
+}
+
 .reset-button:hover {
   background-color: #3d8b40;
+}
+
+.app-container.dark-mode .reset-button:hover {
+  background-color: #256029;
 }
 
 /* ESTILOS MEJORADOS PARA LA TABLA DE EGRESADOS */
@@ -152,6 +216,10 @@ h3 {
   margin-top: 25px;
   border-radius: 10px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.app-container.dark-mode .egresados-table-container {
+  box-shadow: 0 5px 20px rgba(0,0,0,0.25);
 }
 
 .egresados-table {
@@ -183,6 +251,11 @@ h3 {
   border-bottom: none;
 }
 
+.app-container.dark-mode .egresados-table th {
+  background: linear-gradient(to bottom, #388e3c, #256029);
+  color: #fff;
+}
+
 .egresados-table th:first-child {
   border-top-left-radius: 8px;
 }
@@ -199,6 +272,11 @@ h3 {
   vertical-align: middle;
 }
 
+.app-container.dark-mode .egresados-table td {
+  color: #e0e0e0;
+  border-bottom: 1px solid #333;
+}
+
 .egresado-row {
   transition: all 0.2s ease;
 }
@@ -209,14 +287,31 @@ h3 {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
+.app-container.dark-mode .egresado-row {
+  background-color: transparent;
+}
+
+.app-container.dark-mode .egresado-row:hover {
+  background-color: #23272f;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
 .egresado-row:nth-child(even) {
   background-color: #f8fbf8;
+}
+
+.app-container.dark-mode .egresado-row:nth-child(even) {
+  background-color: #181a20;
 }
 
 /* Celdas especiales */
 .photo-cell {
   width: 60px;
   text-align: center;
+}
+
+.app-container.dark-mode .photo-cell {
+  background: none;
 }
 
 .photo-wrapper {
@@ -235,6 +330,11 @@ h3 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.app-container.dark-mode .egresado-photo-small {
+  border: 2px solid #81c784;
+  box-shadow: 0 2px 8px rgba(129, 199, 132, 0.3);
+}
+
 .egresado-row:hover .egresado-photo-small {
   transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
@@ -243,6 +343,10 @@ h3 {
 .name-cell {
   font-weight: 600;
   color: #2e7d32; /* Verde más oscuro para el nombre */
+}
+
+.app-container.dark-mode .name-cell {
+  color: #81c784;
 }
 
 .egresado-name {
@@ -271,6 +375,14 @@ h3 {
   color: #555;
 }
 
+.app-container.dark-mode .year-cell,
+.app-container.dark-mode .position-cell,
+.app-container.dark-mode .company-cell,
+.app-container.dark-mode .degree-cell,
+.app-container.dark-mode .location-cell {
+  color: #bdbdbd;
+}
+
 .status-cell {
   text-align: center;
 }
@@ -286,10 +398,20 @@ h3 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.app-container.dark-mode .status-badge {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
 .status-employed {
   background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
   color: #2e7d32;
   border-left: 3px solid #2e7d32;
+}
+
+.app-container.dark-mode .status-employed {
+  background: linear-gradient(135deg, #263d29, #388e3c);
+  color: #81c784;
+  border-left: 3px solid #81c784;
 }
 
 .status-studying {
@@ -298,10 +420,22 @@ h3 {
   border-left: 3px solid #1565c0;
 }
 
+.app-container.dark-mode .status-studying {
+  background: linear-gradient(135deg, #1a237e, #1976d2);
+  color: #90caf9;
+  border-left: 3px solid #90caf9;
+}
+
 .status-searching {
   background: linear-gradient(135deg, #fff3e0, #ffe0b2);
   color: #e65100;
   border-left: 3px solid #e65100;
+}
+
+.app-container.dark-mode .status-searching {
+  background: linear-gradient(135deg, #4e342e, #ffb300);
+  color: #ffe082;
+  border-left: 3px solid #ffe082;
 }
 
 .company-cell {
@@ -358,10 +492,19 @@ h3 {
   color: white;
 }
 
+.app-container.dark-mode .contact-button-table.email {
+  background: linear-gradient(to bottom, #388e3c, #256029);
+  color: #fff;
+}
+
 .contact-button-table.email:hover {
   background: linear-gradient(to bottom, #43a047, #388e3c);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.app-container.dark-mode .contact-button-table.email:hover {
+  background: linear-gradient(to bottom, #256029, #1b3c1a);
 }
 
 .contact-button-table.linkedin {
@@ -369,10 +512,19 @@ h3 {
   color: white;
 }
 
+.app-container.dark-mode .contact-button-table.linkedin {
+  background: linear-gradient(to bottom, #005687, #003f5c);
+  color: #fff;
+}
+
 .contact-button-table.linkedin:hover {
   background: linear-gradient(to bottom, #0066a1, #005687);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 119, 181, 0.3);
+}
+
+.app-container.dark-mode .contact-button-table.linkedin:hover {
+  background: linear-gradient(to bottom, #003f5c, #00263a);
 }
 
 .no-results {
@@ -384,6 +536,12 @@ h3 {
   border-radius: 8px;
   border: 1px dashed #ccc;
   margin: 20px 0;
+}
+
+.app-container.dark-mode .no-results {
+  background-color: #23272f;
+  color: #bdbdbd;
+  border: 1px dashed #444;
 }
 
 /* Historias y Testimonios */

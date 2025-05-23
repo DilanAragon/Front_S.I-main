@@ -116,17 +116,7 @@ const Empresas = () => {
       </header>
 
       <section className="controles-filtros">
-        <div className="grupo-filtro">
-          <input
-            type="search"
-            placeholder="Buscar por nombre, ciudad o sector..."
-            value={filtro}
-            onChange={e => setFiltro(e.target.value)}
-            className="entrada-busqueda"
-          />
-        </div>
-
-        <div className="grupo-filtro">
+        <div className="filtros-superiores">
           <select
             value={ciudadFiltro}
             onChange={e => setCiudadFiltro(e.target.value)}
@@ -137,9 +127,6 @@ const Empresas = () => {
               <option key={ciudad} value={ciudad}>{ciudad}</option>
             ))}
           </select>
-        </div>
-
-        <div className="grupo-filtro">
           <select
             value={sectorFiltro}
             onChange={e => setSectorFiltro(e.target.value)}
@@ -151,18 +138,16 @@ const Empresas = () => {
             ))}
           </select>
         </div>
-
-        <div className="contenedor-botones">
+        <div className="acciones-filtros">
           <button 
             onClick={limpiarFiltros}
-            className="boton-secundario"
+            className="boton-reiniciar"
           >
             Reiniciar Filtros
           </button>
-          
           <button 
             onClick={manejarExportacion}
-            className="boton-primario"
+            className="boton-exportar"
           >
             Exportar Datos
           </button>

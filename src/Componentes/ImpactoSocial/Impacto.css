@@ -1,4 +1,3 @@
-
 .impacto-container {
     width: 100%;
     max-width: 1200px;
@@ -23,61 +22,123 @@
     font-size: 1.1rem;
 }
   
+/* --- FILTRO: DISEÑO ESTÁTICO OSCURO/VERDE --- */
 .filter-section {
-    background-color: #f9f9f9;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 5px;
-    border: 1px solid #eee;
-    max-width: 300px;
-    text-align: left;
+  width: 100%;
+  padding: 24px 32px;
+  margin-bottom: 25px;
+  background: #181a20;
+  box-shadow: 0 2px 24px rgba(44, 62, 80, 0.18);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-radius: 28px;
+  border: 2px solid #23272f;
 }
-  
+
 .filters-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1px;
-    margin-top: 5px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 28px;
+  flex: 1;
 }
-  
+
 .filter-group {
-    flex: 1;
-    min-width: 200px;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-  
+
 .filter-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
+  font-weight: 600;
+  color: #4caf50;
+  font-size: 1.1rem;
+  margin-bottom: 2px;
 }
-  
+
 .filter-group select {
+  width: 100%;
+  padding: 16px 18px;
+  border: 2px solid #4caf50;
+  border-radius: 14px;
+  background-color: #181a20;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 500;
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
+  box-shadow: 0 1px 8px rgba(76, 175, 80, 0.10);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='10' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%234caf50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 22px 14px;
+}
+
+.filter-group select:hover,
+.filter-group select:focus {
+  border-color: #90C074;
+  box-shadow: 0 2px 12px rgba(144, 192, 116, 0.13);
+}
+
+.filter-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.reset-button,
+.export-button {
+  min-width: 160px;
+  padding: 16px 0;
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  color: #fff;
+  background: linear-gradient(90deg, #4caf50 60%, #388e3c 100%);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.13);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.export-button {
+  background: linear-gradient(90deg, #388e3c 60%, #90C074 100%);
+}
+
+.reset-button:hover,
+.export-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .filter-actions {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: white;
-    font-size: 14px;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 0;
+    align-items: stretch;
+    justify-content: center;
+  }
+  .reset-button,
+  .export-button {
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+    padding: 12px 0;
+  }
 }
-  
-.reset-button {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 500;
-    align-self: flex-end;
-    margin-top: 24px;
-    transition: background-color 0.3s;
-}
-  
-.reset-button:hover {
-    background-color: #3d8b40;
-}
-  
+
 .impacto-table-container {
     width: 100%;
     overflow-x: auto;
@@ -355,16 +416,92 @@
     to { opacity: 1; transform: scale(1); }
   }
 
-  .export-button {
-  background-color: #28a745;
-  color: white;
-  padding: 0.5rem 1rem;
-  margin-left: 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.app-container.dark-mode .filter-section {
+  background: #181a20;
+  border-radius: 28px;
+  border: 2px solid #23272f;
+  box-shadow: 0 2px 24px rgba(44, 62, 80, 0.18);
+  padding: 24px 32px;
 }
 
-.export-button:hover {
-  background-color: #218838;
+.app-container.dark-mode .filters-container {
+  gap: 28px;
+  align-items: center;
+}
+
+.app-container.dark-mode .filter-group label {
+  color: #bdbdbd;
+}
+
+.app-container.dark-mode .filter-group select {
+  border: 2px solid #4caf50;
+  border-radius: 14px;
+  background-color: #181a20;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 500;
+  box-shadow: 0 1px 8px rgba(76, 175, 80, 0.10);
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='10' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%234caf50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 22px 14px;
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.app-container.dark-mode .filter-group select:focus,
+.app-container.dark-mode .filter-group select:hover {
+  border-color: #90C074;
+  box-shadow: 0 2px 12px rgba(144, 192, 116, 0.13);
+}
+
+.app-container.dark-mode .filter-actions {
+  gap: 18px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.app-container.dark-mode .reset-button,
+.app-container.dark-mode .export-button {
+  min-width: 160px;
+  padding: 16px 0;
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  color: #fff;
+  background: linear-gradient(90deg, #4caf50 60%, #388e3c 100%);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.13);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.app-container.dark-mode .export-button {
+  background: linear-gradient(90deg, #388e3c 60%, #90C074 100%);
+}
+
+.app-container.dark-mode .reset-button:hover,
+.app-container.dark-mode .export-button:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Responsive para modo oscuro */
+@media (max-width: 900px) {
+  .app-container.dark-mode .filter-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 0;
+    align-items: stretch;
+    justify-content: center;
+  }
+  .app-container.dark-mode .reset-button,
+  .app-container.dark-mode .export-button {
+    width: 100%;
+    min-width: 0;
+    font-size: 1rem;
+    padding: 12px 0;
+  }
 }

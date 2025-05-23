@@ -129,6 +129,55 @@
   background-color: #4caf50;
 }
 
+/* Modo oscuro para testimonios */
+.dark-mode .testimonios-container {
+  background-color: #181a20;
+  color: #e0e0e0;
+}
+
+.dark-mode .testimonio-card {
+  background-color: #23272f;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .testimonio-info h3 {
+  color: #e0e0e0;
+}
+
+.dark-mode .testimonio-graduacion {
+  color: #bdbdbd;
+}
+
+.dark-mode .testimonio-texto p {
+  color: #bdbdbd;
+}
+
+.dark-mode .carousel-button {
+  background-color: #388e3c;
+  color: #fff;
+}
+
+.dark-mode .carousel-button:hover {
+  background-color: #256029;
+}
+
+.dark-mode .testimonio-imagen {
+  border-color: #81c784;
+  background-color: #2e3440;
+}
+
+.dark-mode .placeholder-icon {
+  fill: #81c784;
+}
+
+.dark-mode .indicador {
+  background-color: #444;
+}
+
+.dark-mode .indicador.active {
+  background-color: #81c784;
+}
+
 @media (max-width: 768px) {
   .testimonios-carousel {
     height: 350px;

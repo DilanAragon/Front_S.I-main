@@ -141,10 +141,9 @@ const Internacionalizacion = () => {
       </div>
 
       <div className="filter-section">
-        <h3>Filtrar por Estado y Tipo</h3>
         <div className="filters-container">
           <div className="filter-group">
-            <label htmlFor="status">Estado</label>
+            <label>Estado</label>
             <select
               name="status"
               id="status"
@@ -158,7 +157,7 @@ const Internacionalizacion = () => {
             </select>
           </div>
           <div className="filter-group">
-            <label htmlFor="type">Tipo</label>
+            <label>Tipo</label>
             <select
               name="type"
               id="type"
@@ -172,6 +171,8 @@ const Internacionalizacion = () => {
               <option value="project">Proyecto</option>
             </select>
           </div>
+        </div>
+        <div className="filter-actions">
           <button className="reset-button" onClick={resetFilters}>
             Restablecer
           </button>

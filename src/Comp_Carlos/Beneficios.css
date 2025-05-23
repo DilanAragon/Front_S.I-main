@@ -1,3 +1,103 @@
+/* Beneficios.css adaptado al estilo de Empresas.css */
+
+/* Contenedor principal */
+.beneficios-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  color: #333;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.08);
+}
+
+/* Modo oscuro para el contenedor principal */
+.app-container.dark-mode .beneficios-container {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Cabecera de la sección */
+.cabecera-seccion {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: linear-gradient(to right, #4caf50, #45a049);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+}
+
+.app-container.dark-mode .cabecera-seccion {
+  background: linear-gradient(to right, #388e3c, #256029);
+  box-shadow: 0 4px 15px rgba(129, 199, 132, 0.3);
+}
+
+.cabecera-seccion h1 {
+  color: white;
+  font-size: 2.4rem;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-container.dark-mode .cabecera-seccion h1 {
+  color: #ffffff;
+}
+
+/* Tarjetas de beneficio */
+.beneficio-card {
+  background-color: #f9f9f9;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.08);
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+  transition: background 0.3s, color 0.3s;
+}
+
+.app-container.dark-mode .beneficio-card {
+  background-color: #23272f;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+
+.beneficio-card h3 {
+  color: #4caf50;
+  margin-bottom: 10px;
+}
+
+.app-container.dark-mode .beneficio-card h3 {
+  color: #81c784;
+}
+
+.beneficio-card p {
+  color: #555;
+}
+
+.app-container.dark-mode .beneficio-card p {
+  color: #bdbdbd;
+}
+
+/* Resultados vacíos */
+.sin-resultados {
+  text-align: center;
+  padding: 40px;
+  font-style: italic;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+  margin: 20px 0;
+}
+
+.app-container.dark-mode .sin-resultados {
+  background-color: #23272f;
+  color: #bdbdbd;
+  border: 1px dashed #444;
+}
+
 /* Modo oscuro para Beneficios */
 body.dark-mode .beneficios-container {
   background-color: #1e1e1e; /* Fondo oscuro */

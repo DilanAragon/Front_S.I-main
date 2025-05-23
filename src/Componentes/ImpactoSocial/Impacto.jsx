@@ -41,8 +41,19 @@ const ImpactoSocial = () => {
   };
 
   const exportToCSV = () => {
-    const csv = Papa.unparse(filteredProyectos);
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    // Mapea los datos exactamente como en la tabla
+    const dataToExport = filteredProyectos.map((p) => ({
+      "TÍTULO": p.title || p.name || "",
+      "BENEFICIARIOS": p.beneficiaries || "",
+      "UBICACIÓN": p.location || "",
+      "INICIO": p.startDate || "",
+      "FIN": p.endDate || "",
+      "ESTADO": statusLabel(p.status),
+    }));
+
+    const csv = Papa.unparse(dataToExport);
+    const bom = "\uFEFF"; // BOM para UTF-8
+    const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
@@ -99,12 +110,14 @@ const ImpactoSocial = () => {
               <option value="planned">Planificado</option>
             </select>
           </div>
-          <button className="reset-button" onClick={resetFilters}>
-            Resetear Filtros
-          </button>
-          <button className="export-button" onClick={exportToCSV}>
-            Exportar CSV
-          </button>
+          <div className="filter-actions">
+            <button className="reset-button" onClick={resetFilters}>
+              Reiniciar Filtros
+            </button>
+            <button className="export-button" onClick={exportToCSV}>
+              Exportar Datos
+            </button>
+          </div>
         </div>
       </div>
 
@@ -133,7 +146,9 @@ const ImpactoSocial = () => {
                   <td className="year-cell">{proyecto.startDate}</td>
                   <td className="year-cell">{proyecto.endDate}</td>
                   <td className="status-cell">
-                    <span className={`status-badge ${statusClass(proyecto.status)}`}>
+                    <span
+                      className={`status-badge ${statusClass(proyecto.status)}`}
+                    >
                       {statusLabel(proyecto.status)}
                     </span>
                   </td>
@@ -158,12 +173,24 @@ const ImpactoSocial = () => {
         <div className="modal">
           <div className="modal-content">
             <h2>Detalles del Proyecto</h2>
-            <p><strong>Título:</strong> {selectedProyecto.title}</p>
-            <p><strong>Descripción:</strong> {selectedProyecto.description}</p>
-            <p><strong>Objetivos:</strong> {selectedProyecto.objectives}</p>
-            <p><strong>Resultados:</strong> {selectedProyecto.results}</p>
-            <p><strong>Participantes:</strong> {selectedProyecto.participants}</p>
-            <button className="close-modal" onClick={closeModal}>Cerrar</button>
+            <p>
+              <strong>Título:</strong> {selectedProyecto.title}
+            </p>
+            <p>
+              <strong>Descripción:</strong> {selectedProyecto.description}
+            </p>
+            <p>
+              <strong>Objetivos:</strong> {selectedProyecto.objectives}
+            </p>
+            <p>
+              <strong>Resultados:</strong> {selectedProyecto.results}
+            </p>
+            <p>
+              <strong>Participantes:</strong> {selectedProyecto.participants}
+            </p>
+            <button className="close-modal" onClick={closeModal}>
+              Cerrar
+            </button>
           </div>
         </div>
       )}
