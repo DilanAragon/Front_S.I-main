@@ -14,6 +14,8 @@ import Beneficios from "./Comp_Carlos/Beneficios";
 import ImpactoSocial from "./Componentes/ImpactoSocial/Impacto";
 import ProyectosEmpresa from "./Comp_Carlos/ProyectosEmpresa";
 import Internacionalizacion from "./Componentes/Internacionalizacion/internacionalizacion";
+import SalidasPracticas from "./Componentes/salidas_practicas/salidas_practicas";
+
 
 function App() {
   const [activeSection, setActiveSection] = useState("inicio");
@@ -131,6 +133,12 @@ function App() {
             >
               Internacionalización
             </li>
+             <li
+              onClick={() => setActiveSection("salidas_practicas")}
+              className={activeSection === "salidas_practicas" ? "active" : ""}
+            >
+              Salidas a Practicas
+            </li>
           </ul>
         </nav>
       </header>
@@ -210,6 +218,8 @@ function App() {
       {activeSection === "events" && <GaleriaMultimedia />}
       {activeSection === "Impacto" && <ImpactoSocial />}
       {activeSection === "Internacionalizacion" && <Internacionalizacion />}
+      {activeSection === "salidas_practicas" && <SalidasPracticas />}
+
 
       {activeSection === "proyectos_empresa" && <ProyectosEmpresa />}
 
