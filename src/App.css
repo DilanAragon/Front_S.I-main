@@ -1038,6 +1038,7 @@ header {
   height: 0;
 }
 
+/* Boton de modo oscuro antes*/
 .slider {
   position: absolute;
   cursor: pointer;
@@ -1045,10 +1046,11 @@ header {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
   transition: 0.4s;
   border-radius: 25px;
+
 }
+/* Boton de modo oscuro despois*/
 
 .slider:before {
   position: absolute;
@@ -1057,17 +1059,8 @@ header {
   width: 19px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
   transition: 0.4s;
   border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: #0b7f46;
-}
-
-input:checked + .slider:before {
-  transform: translateX(25px);
 }
 
 /* Fondo de la sección de información en modo claro */

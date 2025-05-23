@@ -4,7 +4,7 @@ import facebookIcon from "./assets/facebook.png";
 import twitterIcon from "./assets/x.png";
 import instagramIcon from "./assets/instagram.png";
 import logoUniCesar from "./assets/LOGO-UNICESAR.png";
-
+import { FaMoon, FaSun } from 'react-icons/fa';
 import Dashboard from "./Componentes/Dashboard/Dashboard";
 import Egresados from "./Componentes/Egresados/Egresados";
 import GaleriaMultimedia from "./Componentes/Eventos/GaleriaMultimedia";
@@ -44,7 +44,9 @@ function App() {
                 checked={isDarkMode}
                 onChange={handleToggle}
               />
-              <span className="slider"></span>
+              <span className="slider">
+                {isDarkMode ? <FaMoon className="icon" /> : <FaSun className="icon" />}
+              </span>
             </label>
           </div>
         </div>

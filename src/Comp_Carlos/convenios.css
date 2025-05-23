@@ -33,7 +33,7 @@
 }
 
 .app-container.dark-mode .titulo {
-  color: #81c784 !important; /* Verde claro en modo oscuro */
+ 
   background: linear-gradient(to right, #388e3c, #256029);
   box-shadow: 0 4px 15px rgba(129, 199, 132, 0.3);
   text-shadow: 0 2px 4px rgba(0,0,0,0.3);

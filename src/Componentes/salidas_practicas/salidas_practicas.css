@@ -1,11 +1,11 @@
 :root {
-  --primary-color: #00b87b;
+  --primary-color: #4caf50;
   --background-light: #f9f9f9;
   --background-dark: #1a1a1a;
   --text-light: #f0f0f0;
   --text-dark: #1a1a1a;
   --border-color: #ccc;
-  --highlight: #00b87b;
+  --highlight: #4caf50;
 }
 
 body.dark .salidas-table th,
@@ -89,7 +89,7 @@ select {
 
 .reset-button {
   background-color: #e0e0e0;
-  color: #333;
+
 }
 
 .reset-button:hover {
@@ -102,7 +102,7 @@ select {
 }
 
 .export-button:hover {
-  background-color: #00b87b;
+  background-color: #4caf50;
 }
 
 .ver-button {
@@ -111,7 +111,7 @@ select {
 }
 
 .ver-button:hover {
-  background-color: #00b87b;
+  background-color: #4caf50;
 }
 
 .salidas-table-container {
