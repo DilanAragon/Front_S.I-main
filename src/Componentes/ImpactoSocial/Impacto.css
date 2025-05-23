@@ -61,16 +61,15 @@
   margin-bottom: 2px;
 }
 
+/* Combobox claro (modo claro) */
 .filter-group select {
-  width: 100%;
-  padding: 16px 18px;
+  background-color: #fff;
+  color: #222;
   border: 2px solid #4caf50;
   border-radius: 14px;
-  background-color: #181a20;
-  color: #fff;
   font-size: 1.15rem;
   font-weight: 500;
-  transition: border 0.2s, box-shadow 0.2s;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
   outline: none;
   box-shadow: 0 1px 8px rgba(76, 175, 80, 0.10);
   appearance: none;
@@ -78,6 +77,23 @@
   background-repeat: no-repeat;
   background-position: right 18px center;
   background-size: 22px 14px;
+}
+
+/* Combobox oscuro (modo oscuro) */
+.app-container.dark-mode .filter-group select {
+  background-color: #181a20;
+  color: #fff;
+  border: 2px solid #4caf50;
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 500;
+  box-shadow: 0 1px 8px rgba(76, 175, 80, 0.10);
+  background-image: url("data:image/svg+xml,%3Csvg width='16' height='10' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%234caf50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 22px 14px;
+  transition: border 0.2s, box-shadow 0.2s;
+  outline: none;
 }
 
 .filter-group select:hover,
@@ -434,10 +450,10 @@
 }
 
 .app-container.dark-mode .filter-group select {
-  border: 2px solid #4caf50;
-  border-radius: 14px;
   background-color: #181a20;
   color: #fff;
+  border: 2px solid #4caf50;
+  border-radius: 14px;
   font-size: 1.15rem;
   font-weight: 500;
   box-shadow: 0 1px 8px rgba(76, 175, 80, 0.10);

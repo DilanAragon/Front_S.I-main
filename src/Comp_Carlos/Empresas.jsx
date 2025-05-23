@@ -115,42 +115,48 @@ const Empresas = () => {
         <h1>Directorio de Empresas</h1>
       </header>
 
-      <section className="controles-filtros">
-        <div className="filtros-superiores">
-          <select
-            value={ciudadFiltro}
-            onChange={e => setCiudadFiltro(e.target.value)}
-            className="selector-filtro"
-          >
-            <option value="">Todas las ciudades</option>
-            {ciudadesUnicas.map(ciudad => (
-              <option key={ciudad} value={ciudad}>{ciudad}</option>
-            ))}
-          </select>
-          <select
-            value={sectorFiltro}
-            onChange={e => setSectorFiltro(e.target.value)}
-            className="selector-filtro"
-          >
-            <option value="">Todos los sectores</option>
-            {sectoresUnicos.map(sector => (
-              <option key={sector} value={sector}>{sector}</option>
-            ))}
-          </select>
+      <section className="filter-section">
+        <div className="filters-container">
+          <div className="filter-group">
+            <label htmlFor="ciudadFiltro">Ciudad</label>
+            <select
+              id="ciudadFiltro"
+              value={ciudadFiltro}
+              onChange={e => setCiudadFiltro(e.target.value)}
+            >
+              <option value="">Todas las ciudades</option>
+              {ciudadesUnicas.map(ciudad => (
+                <option key={ciudad} value={ciudad}>{ciudad}</option>
+              ))}
+            </select>
+          </div>
+          <div className="filter-group">
+            <label htmlFor="sectorFiltro">Sector</label>
+            <select
+              id="sectorFiltro"
+              value={sectorFiltro}
+              onChange={e => setSectorFiltro(e.target.value)}
+            >
+              <option value="">Todos los sectores</option>
+              {sectoresUnicos.map(sector => (
+                <option key={sector} value={sector}>{sector}</option>
+              ))}
+            </select>
+          </div>
+          <div className="filter-group">
+            <label htmlFor="nombreFiltro">Buscar</label>
+            <input
+              type="text"
+              id="nombreFiltro"
+              placeholder="Nombre, ciudad o sector"
+              value={filtro}
+              onChange={e => setFiltro(e.target.value)}
+            />
+          </div>
         </div>
-        <div className="acciones-filtros">
-          <button 
-            onClick={limpiarFiltros}
-            className="boton-reiniciar"
-          >
-            Reiniciar Filtros
-          </button>
-          <button 
-            onClick={manejarExportacion}
-            className="boton-exportar"
-          >
-            Exportar Datos
-          </button>
+        <div className="buttons-group">
+          <button className="reset-button" onClick={limpiarFiltros}>Reiniciar Filtros</button>
+          <button className="export-button" onClick={manejarExportacion}>Exportar Datos</button>
         </div>
       </section>
 

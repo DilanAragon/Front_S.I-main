@@ -96,17 +96,15 @@
   margin-bottom: 2px;
 }
 
-/* Select moderno */
+/* Combobox claro (modo claro) */
 .filter-group select {
-  min-width: 240px;
-  padding: 14px 18px;
+  background-color: #fff;
+  color: #222;
   border: 2px solid #27ae60;
   border-radius: 12px;
-  background: #181a20;
-  color: #fff;
   font-size: 1.1rem;
   font-weight: 500;
-  transition: border 0.2s, box-shadow 0.2s;
+  transition: border 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
   outline: none;
   box-shadow: 0 1px 8px rgba(39, 174, 96, 0.10);
   appearance: none;
@@ -116,10 +114,11 @@
   background-size: 22px 14px;
 }
 
-.filter-group select:focus,
-.filter-group select:hover {
-  border-color: #90C074;
-  box-shadow: 0 2px 12px rgba(144, 192, 116, 0.13);
+/* Combobox oscuro (modo oscuro) */
+.app-container.dark-mode .filter-group select {
+  background-color: #23272f;
+  color: #e0e0e0;
+  border: 2px solid #27ae60;
 }
 
 /* Botón de reset alineado y destacado */

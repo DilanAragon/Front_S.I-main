@@ -35,7 +35,7 @@ export default function ImpactoProyectos() {
     },
   ];
 
-  const [proyectos, setProyectos] = useState(proyectosEjemplo);
+  const [proyectos] = useState(proyectosEjemplo);
   const [estadoFiltro, setEstadoFiltro] = useState('');
   const [empresaFiltro, setEmpresaFiltro] = useState('');
   const [proyectosFiltrados, setProyectosFiltrados] = useState(proyectosEjemplo);
@@ -120,38 +120,37 @@ export default function ImpactoProyectos() {
         <p>Listado de proyectos con filtros y detalles relevantes.</p>
       </header>
 
-<section className="filters-container">
-  <div className="filter-group filter-section">
-    <label htmlFor="estadoFiltro">Estado</label>
-    <select
-      id="estadoFiltro"
-      value={estadoFiltro}
-      onChange={e => setEstadoFiltro(e.target.value)}
-    >
-      <option value="">Todos</option>
-      <option value="En curso">En curso</option>
-      <option value="Completado">Completado</option>
-      <option value="Planificado">Planificado</option>
-    </select>
-  </div>
-
-  <div className="filter-group filter-section">
-    <label htmlFor="empresaFiltro">Empresa</label>
-    <input
-      type="text"
-      id="empresaFiltro"
-      placeholder="Buscar empresa"
-      value={empresaFiltro}
-      onChange={e => setEmpresaFiltro(e.target.value)}
-    />
-  </div>
-
-  {/* Agrupamos los botones para alinearlos */}
-  <div className="buttons-group">
-    <button className="reset-button" onClick={resetFiltros}>Limpiar filtros</button>
-    <button className="export-button" onClick={exportarCSV}>Exportar CSV</button>
-  </div>
-</section>
+      <section className="filter-section">
+        <div className="filters-container">
+          <div className="filter-group">
+            <label htmlFor="estadoFiltro">Estado</label>
+            <select
+              id="estadoFiltro"
+              value={estadoFiltro}
+              onChange={e => setEstadoFiltro(e.target.value)}
+            >
+              <option value="">Todos</option>
+              <option value="En curso">En curso</option>
+              <option value="Completado">Completado</option>
+              <option value="Planificado">Planificado</option>
+            </select>
+          </div>
+          <div className="filter-group">
+            <label htmlFor="empresaFiltro">Empresa</label>
+            <input
+              type="text"
+              id="empresaFiltro"
+              placeholder="Buscar empresa"
+              value={empresaFiltro}
+              onChange={e => setEmpresaFiltro(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="buttons-group">
+          <button className="reset-button" onClick={resetFiltros}>Limpiar filtros</button>
+          <button className="export-button" onClick={exportarCSV}>Exportar CSV</button>
+        </div>
+      </section>
       <div className="impacto-table-container">
         {proyectosFiltrados.length === 0 ? (
           <div className="no-results">No se encontraron proyectos.</div>

@@ -79,6 +79,35 @@
   color: #bdbdbd;
 }
 
+/* Pestaña activa: fondo blanco, texto verde */
+.tab-button.active {
+  background: #fff !important;
+  color: #43a047 !important; /* Verde institucional */
+  font-weight: 700;
+  border-bottom: 3px solid #43a047;
+  z-index: 2;
+}
+
+/* Pestaña inactiva: fondo transparente, texto gris */
+.tab-button {
+  background: transparent;
+  color: #333;
+  border: none;
+  font-weight: 500;
+}
+
+/* En modo oscuro: pestaña activa texto verde claro sobre fondo oscuro */
+.app-container.dark-mode .tab-button.active {
+  background: #23272f !important;
+  color: #81c784 !important;
+  border-bottom: 3px solid #81c784;
+}
+
+/* En modo oscuro: pestaña inactiva texto gris claro */
+.app-container.dark-mode .tab-button {
+  color: #bdbdbd;
+}
+
 .tab-button:hover {
   background-color: #e0e0e0;
 }
@@ -88,7 +117,7 @@
 }
 
 .tab-button.active {
-  color: #4caf50;
+  color: #ffffff;
   font-weight: bold;
   border-bottom: 3px solid #4caf50;
   background-color: #fff;
@@ -133,16 +162,24 @@ h3 {
 
 /* Estilos para el filtro */
 .filter-section {
-  background-color: #f9f9f9;
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   margin-bottom: 30px;
   border: 1px solid #eee;
+  box-shadow: 0 2px 10px rgba(44, 62, 80, 0.06);
 }
 
 .app-container.dark-mode .filter-section {
   background-color: #181a20;
   border: 1px solid #333;
+  box-shadow: 0 2px 10px rgba(44, 62, 80, 0.18);
+}
+
+.app-container:not(.dark-mode) .filter-section {
+  background-color: #f9f9f9 !important;
+  border: 1px solid #eee !important;
+  box-shadow: 0 2px 10px rgba(44, 62, 80, 0.06) !important;
 }
 
 .filters-container {
@@ -161,26 +198,36 @@ h3 {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #555;
+  color: #333;
 }
 
 .app-container.dark-mode .filter-group label {
   color: #bdbdbd;
 }
 
+/* Combobox (select) en modo claro */
 .filter-group select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: white;
-  font-size: 14px;
+  background-color: #fff;
+  color: #222;
+  border: 1.5px solid #4caf50;
+  transition: border 0.2s, background 0.2s, color 0.2s;
 }
 
+/* Combobox (select) en modo oscuro */
 .app-container.dark-mode .filter-group select {
   background-color: #23272f;
   color: #e0e0e0;
-  border: 1px solid #333;
+  border: 1.5px solid #4caf50;
+}
+
+.filter-group select:focus,
+.filter-group select:hover {
+  border-color: #388e3c;
+}
+
+.app-container.dark-mode .filter-group select:focus,
+.app-container.dark-mode .filter-group select:hover {
+  border-color: #90C074;
 }
 
 .reset-button {
@@ -542,6 +589,17 @@ h3 {
   background-color: #23272f;
   color: #bdbdbd;
   border: 1px dashed #444;
+}
+
+/* Color de selección de texto para mejor visibilidad */
+::selection {
+  background: #388e3c;
+  color: #fff;
+}
+
+.app-container.dark-mode ::selection {
+  background: #81c784;
+  color: #23272f;
 }
 
 /* Historias y Testimonios */

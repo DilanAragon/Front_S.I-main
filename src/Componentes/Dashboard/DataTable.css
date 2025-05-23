@@ -36,3 +36,32 @@
 .data-table td {
   color: #555;
 }
+
+/* Modo oscuro para DataTable */
+.app-container.dark-mode .data-table-container {
+  background-color: #181a20;
+}
+
+.app-container.dark-mode .data-table {
+  background-color: #23272f;
+  color: #e0e0e0;
+}
+
+.app-container.dark-mode .data-table th {
+  background-color: #263238;
+  color: #90C074;
+  border-bottom: 1px solid #333;
+}
+
+.app-container.dark-mode .data-table td {
+  color: #e0e0e0;
+  border-bottom: 1px solid #333;
+}
+
+.app-container.dark-mode .data-table tr:nth-child(even) {
+  background-color: #181a20;
+}
+
+.app-container.dark-mode .data-table tr:hover {
+  background-color: #2e3440;
+}

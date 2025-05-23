@@ -41,4 +41,3 @@ const HistoriaDestacada = ({ historia }) => {
 };
 
 export default HistoriaDestacada;
-// HistoriaDestacada.css
