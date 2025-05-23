@@ -1,49 +1,56 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './GaleriaMultimedia.module.css';
 
+import jornadainvestigacionImg from '../../assets/jornadainvestigacion.jpg';
+import estructuradatosImg from '../../assets/estructuradatos.jpg';
+import talentotechImg from '../../assets/talentotech.jpg';
+import innovacionamchamImg from '../../assets/innovacionamcham.jpg'; // Corregido: asumimos que el nombre del archivo es 'innovacionamcham.jpg'
+import viverovirtualImg from '../../assets/viverovirtual.jpg';
+import metaversoImg from '../../assets/metaverso.jpg';
+
 function NuestrosEventos() {
   const [eventos] = useState([
-    { 
-      id: 1, 
-      title: 'Egresado Sobresaliente', 
-      imageUrl: '/assets/eventos/egresado1.jpg', 
+    {
+      id: 1,
+      title: 'Jornada de Investigacion', // Corregido el typo "Sfotware" a "Software"
+      imageUrl: jornadainvestigacionImg, // ¡USO LA VARIABLE IMPORTADA!
       linkUrl: '#',
-      fecha: '12 Mayo, 2025' 
+      fecha: '2 Septiembre, 2019'
     },
-    { 
-      id: 2, 
-      title: 'Conozca a Giovanni', 
-      imageUrl: '/assets/eventos/evento2.jpg', 
+    {
+      id: 2,
+      title: 'Primer Curso de Programación',
+      imageUrl: estructuradatosImg, // ¡USO LA VARIABLE IMPORTADA!
       linkUrl: '#',
-      fecha: '18 Mayo, 2025' 
+      fecha: '27 Marzo, 2023'
     },
-    { 
-      id: 3, 
-      title: 'Campamento XR', 
-      imageUrl: '/assets/eventos/campamento.jpg', 
+    {
+      id: 3,
+      title: 'Talento Tech',
+      imageUrl: talentotechImg, // ¡USO LA VARIABLE IMPORTADA!
       linkUrl: '#',
-      fecha: '25 Mayo, 2025' 
+      fecha: '29 Febrero, 2025'
     },
-    { 
-      id: 4, 
-      title: 'Especialización', 
-      imageUrl: '/assets/eventos/ingenieria.jpg', 
+    {
+      id: 4,
+      title: 'Innovación AmCham Panama',
+      imageUrl: innovacionamchamImg, // ¡USO LA VARIABLE IMPORTADA!
       linkUrl: '#',
-      fecha: '2 Junio, 2025' 
+      fecha: '2 Marzo, 2025'
     },
-    { 
-      id: 5, 
-      title: 'Feria de Empleo', 
-      imageUrl: '/assets/eventos/feria.jpg', 
+    {
+      id: 5,
+      title: 'Vivero Virtual',
+      imageUrl: viverovirtualImg, // ¡USO LA VARIABLE IMPORTADA!
       linkUrl: '#',
-      fecha: '10 Junio, 2025' 
+      fecha: '10 Junio, 2025'
     },
-    { 
-      id: 6, 
-      title: 'Congreso Anual', 
-      imageUrl: '/assets/eventos/congreso.jpg', 
+    {
+      id: 6,
+      title: 'Campamento XR Metaverso',
+      imageUrl: metaversoImg, // ¡USO LA VARIABLE IMPORTADA!
       linkUrl: '#',
-      fecha: '15 Junio, 2025' 
+      fecha: '16 Junio, 2025'
     },
   ]);
 
@@ -85,7 +92,7 @@ function NuestrosEventos() {
     <div className={styles.seccionEventos}>
       <div className={styles.eventosHeader}>
         <h3>Nuestros Eventos - Noticias Destacadas</h3>
-        <button 
+        <button
           className={styles.pauseButton}
           onClick={togglePause}
           aria-label={isPaused ? "Reanudar" : "Pausar"}
@@ -93,26 +100,27 @@ function NuestrosEventos() {
           {isPaused ? "▶ Reanudar" : "⏸️ Pausar"}
         </button>
       </div>
-      
+
       <div className={styles.singleCarouselContainer}>
-        <button 
+        <button
           className={`${styles.carouselBtn} ${styles.prevBtn}`}
           onClick={prevSlide}
           aria-label="Anterior"
         >
           &#10094;
         </button>
-        
+
         <div className={styles.singleEventoContainer}>
           {eventos.map((evento, index) => (
-            <div 
-              key={evento.id} 
+            <div
+              key={evento.id}
               className={`${styles.eventoSlide} ${index === currentIndex ? styles.activeSlide : ''}`}
             >
               {index === currentIndex && (
                 <div className={styles.eventoCard}>
                   <a href={evento.linkUrl} target="_blank" rel="noopener noreferrer" className={styles.eventoCardA}>
                     <div className={styles.eventoImageContainer}>
+                      {/* El src ahora usa la variable importada que tiene la URL correcta generada por Webpack */}
                       <img src={evento.imageUrl} alt={evento.title} className={styles.eventoImagen} />
                     </div>
                     <div className={styles.eventoInfo}>
@@ -125,8 +133,8 @@ function NuestrosEventos() {
             </div>
           ))}
         </div>
-        
-        <button 
+
+        <button
           className={`${styles.carouselBtn} ${styles.nextBtn}`}
           onClick={nextSlide}
           aria-label="Siguiente"
@@ -134,11 +142,11 @@ function NuestrosEventos() {
           &#10095;
         </button>
       </div>
-      
+
       <div className={styles.carouselIndicators}>
         {eventos.map((_, index) => (
-          <span 
-            key={index} 
+          <span
+            key={index}
             className={`${styles.indicator} ${currentIndex === index ? styles.activeIndicator : ''}`}
             onClick={() => setCurrentIndex(index)}
           />
