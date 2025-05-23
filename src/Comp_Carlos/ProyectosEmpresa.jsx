@@ -117,7 +117,6 @@ export default function ImpactoProyectos() {
     <div className="impacto-container">
       <header className="impacto-header">
         <h1>Proyectos Universidad–Empresa</h1>
-        <p>Listado de proyectos con filtros y detalles relevantes.</p>
       </header>
 
       <section className="filter-section">
