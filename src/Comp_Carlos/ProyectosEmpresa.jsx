@@ -2,44 +2,45 @@ import React, { useState, useEffect } from 'react';
 import './proyectos.css';
 
 export default function ImpactoProyectos() {
-  const proyectosEjemplo = [
-    {
-      id: 1,
-      proyecto: 'Escalando la Innovación en la Región Caribe',
-      empresa: 'Futurizza S.A.S.',
-      descripcion:
-        'Proyecto para impulsar el tejido empresarial de la Región Caribe, financiando prototipos y escalando procesos de innovación con 14 empresas beneficiarias.',
-      fechaInicio: '2024-02-15',
-      fechaFin: '2024-12-31',
-      estado: 'En curso',
-    },
-    {
-      id: 2,
-      proyecto: 'Fortalecimiento del Emprendimiento con Enactus Colombia',
-      empresa: 'Enactus Colombia',
-      descripcion:
-        'Alianza estratégica para fortalecer competencias interdisciplinarias en emprendimiento e innovación.',
-      fechaInicio: '2025-02-25',
-      fechaFin: '2025-08-25',
-      estado: 'En curso',
-    },
-    {
-      id: 3,
-      proyecto: 'Mesa de Trabajo “Transición Energética Justa en el Cesar”',
-      empresa: 'Gobernación del Cesar · UPME · Movimiento No Fracking',
-      descripcion:
-        'Encuentro técnico para definir políticas y estrategias de transición energética justa en el Cesar.',
-      fechaInicio: '2025-04-25',
-      fechaFin: '2025-04-25',
-      estado: 'Completado',
-    },
-  ];
-
-  const [proyectos] = useState(proyectosEjemplo);
+  const [proyectos, setProyectos] = useState([]);
   const [estadoFiltro, setEstadoFiltro] = useState('');
   const [empresaFiltro, setEmpresaFiltro] = useState('');
-  const [proyectosFiltrados, setProyectosFiltrados] = useState(proyectosEjemplo);
+  const [proyectosFiltrados, setProyectosFiltrados] = useState([]);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  // Cargar proyectos desde API al montar componente
+  useEffect(() => {
+    const cargarProyectos = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/proyectos`);
+        if (!res.ok) throw new Error("Error cargando proyectos");
+        const data = await res.json();
+
+        // Transformar datos para que coincidan con los campos usados en la UI
+        const proyectosTransformados = data.map(p => ({
+          id: p.proyecto_id,
+          proyecto: p.titulo,
+               // Ajusta si el API no tiene este campo
+         
+          fechaInicio: p.fecha_inicio || '',
+         
+          estado: p.estado || 'Planificado', // Ajusta según lo que maneje tu API
+        }));
+
+        setProyectos(proyectosTransformados);
+        setProyectosFiltrados(proyectosTransformados);
+      } catch (error) {
+        console.error(error);
+        setProyectos([]);
+        setProyectosFiltrados([]);
+      }
+    };
+
+    cargarProyectos();
+  }, [API_URL]);
+
+  // Filtrar proyectos según filtros activos
   useEffect(() => {
     let filtrados = proyectos;
 
@@ -74,21 +75,18 @@ export default function ImpactoProyectos() {
     }
   };
 
-  // Función para exportar a CSV los proyectos filtrados
+  // Exportar proyectos filtrados a CSV
   const exportarCSV = () => {
     if (proyectosFiltrados.length === 0) {
       alert('No hay proyectos para exportar.');
       return;
     }
 
-    const headers = ['Proyecto', 'Empresa', 'Descripción', 'Fecha Inicio', 'Fecha Fin', 'Estado'];
+    const headers = ['Proyecto', 'Fecha Inicio', 'Estado'];
 
     const rows = proyectosFiltrados.map(p => [
       p.proyecto,
-      p.empresa,
-      p.descripcion,
       p.fechaInicio,
-      p.fechaFin,
       p.estado,
     ]);
 
@@ -158,10 +156,7 @@ export default function ImpactoProyectos() {
             <thead>
               <tr>
                 <th>Proyecto</th>
-                <th>Empresa</th>
-                <th>Descripción</th>
                 <th>Fecha Inicio</th>
-                <th>Fecha Fin</th>
                 <th>Estado</th>
                 <th>Contacto</th>
               </tr>
