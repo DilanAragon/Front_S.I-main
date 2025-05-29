@@ -9,20 +9,35 @@ const ImpactoSocial = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProyecto, setSelectedProyecto] = useState(null);
 
-  useEffect(() => {
-    Papa.parse("/impacto_social.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        setProyectos(results.data);
-        setFilteredProyectos(results.data);
-      },
-      error: (error) => {
-        console.error("Error al cargar los datos:", error);
-      },
-    });
-  }, []);
+useEffect(() => {
+  const fetchProyectos = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/impacto-social/`);
+      const data = await response.json();
+
+      // Aquí mapeamos los campos al formato que ya usas en el frontend
+      const mappedData = data.map(p => ({
+        title: p.titulo,
+        beneficiaries: p.beneficiarios,
+        location: p.ubicacion,
+        startDate: p.fecha_inicio,
+        endDate: p.fecha_final,
+        status: p.estado || '', // por si no viene estado
+        description: p.descripcion || '',
+        objectives: p.objetivos || '',
+        results: p.resultados || '',
+        participants: p.participantes || ''
+      }));
+
+      setProyectos(mappedData);
+      setFilteredProyectos(mappedData);
+    } catch (error) {
+      console.error('Error al obtener los proyectos:', error);
+    }
+  };
+
+  fetchProyectos();
+}, []);
 
   const handleFilterChange = (e) => {
     const status = e.target.value;
