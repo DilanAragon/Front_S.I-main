@@ -13,20 +13,34 @@ const Internacionalizacion = () => {
   const [flagUrls, setFlagUrls] = useState({});
 
   useEffect(() => {
-    Papa.parse("/relaciones_internacionales.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        setRelaciones(results.data);
-        setFilteredRelaciones(results.data);
-        fetchFlags(results.data);
-      },
-      error: (error) => {
-        console.error("Error al cargar los datos:", error);
-      },
-    });
-  }, []);
+  const fetchProyectos = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/relaciones-internacionales/`);
+      const data = await response.json();
+      // Aquí mapeamos los campos al formato que ya usas en el frontend
+      const mappedData = data.map(p => ({
+        name:p.nombre,
+        country:p.pais,
+        institution:p.institucion,
+        type:p.tipo,
+        startDate:p.fecha_inicio,
+        endDate:p.fecha_finalizacion,
+        description:p.descripcion,
+        participants:p.participantes,
+        results:p.resultados,
+        status: p.estado
+      }));
+        // console.log(data[0]);
+        setRelaciones(mappedData);
+        setFilteredRelaciones(mappedData);
+        fetchFlags(mappedData);
+    } catch (error) {
+      console.error('Error al obtener los proyectos:', error);
+    }
+  };
+
+  fetchProyectos();
+}, []);
 
   const fetchFlags = (relaciones) => {
     const countries = relaciones.map((r) => r.country);

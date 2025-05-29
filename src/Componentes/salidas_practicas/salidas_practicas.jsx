@@ -10,20 +10,32 @@ const SalidasPracticas = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedSalida, setSelectedSalida] = useState(null);
 
-  useEffect(() => {
-    Papa.parse("/salidas_practicas_ejemplo.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        setSalidas(results.data);
-        setFilteredSalidas(results.data);
-      },
-      error: (error) => {
-        console.error("Error al cargar el CSV:", error);
-      },
-    });
+useEffect(() => {
+    const fetchProyectos = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/salidas-practicas/`);
+        const data = await response.json();
+        // Aquí mapeamos los campos al formato que ya usas en el frontend
+        const mappedData = data.map(p => ({
+          fecha_salida: p.fecha_salida,
+          lugar_destino: p.lugar_destino,
+          responsable: p.responsable,
+          cantidad_estudiantes: p.cantidad_estudiantes,
+          hora_salida: p.hora_salida,
+          hora_regreso: p.hora_regreso,
+          observaciones: p.observaciones
+          
+        }));
+          setSalidas(mappedData);
+          setFilteredSalidas(mappedData);
+      } catch (error) {
+        console.error('Error al obtener los proyectos:', error);
+      }
+    };
+  
+    fetchProyectos();
   }, []);
+  
 
   // Filtrar cuando cambian los filtros o los datos
   useEffect(() => {
