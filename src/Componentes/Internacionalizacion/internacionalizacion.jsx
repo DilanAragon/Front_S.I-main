@@ -13,145 +13,90 @@ const Internacionalizacion = () => {
   const [flagUrls, setFlagUrls] = useState({});
 
   useEffect(() => {
-  const fetchProyectos = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/relaciones-internacionales/`);
-      const data = await response.json();
-      // Aquí mapeamos los campos al formato que ya usas en el frontend
-      const mappedData = data.map(p => ({
-        name:p.nombre,
-        country:p.pais,
-        institution:p.institucion,
-        type:p.tipo,
-        startDate:p.fecha_inicio,
-        endDate:p.fecha_finalizacion,
-        description:p.descripcion,
-        participants:p.participantes,
-        results:p.resultados,
-        status: p.estado
-      }));
-        // console.log(data[0]);
-        setRelaciones(mappedData);
-        setFilteredRelaciones(mappedData);
-        fetchFlags(mappedData);
-    } catch (error) {
-      console.error('Error al obtener los proyectos:', error);
-    }
-  };
+    fetch(`${import.meta.env.VITE_API_URL}/api/relaciones-internacionales/`)
+      .then(res => res.json())
+      .then(data => {
+        const mapped = data.map(p => ({
+          name: p.nombre,
+          country: p.pais.toLowerCase(),
+          institution: p.institucion,
+          type: p.tipo,
+          startDate: p.fecha_inicio,
+          endDate: p.fecha_finalizacion,
+          description: p.descripcion,
+          participants: p.participantes,
+          results: p.resultados,
+          status: p.estado,
+        }));
+        setRelaciones(mapped);
+        setFilteredRelaciones(mapped);
+        fetchFlags(mapped);
+      })
+      .catch(err => console.error("Error al obtener relaciones:", err));
+  }, []);
 
-  fetchProyectos();
-}, []);
-
-  const fetchFlags = (relaciones) => {
-    const countries = relaciones.map((r) => r.country);
-    const uniqueCountries = [...new Set(countries)];
-
-    const fetchFlagsData = async () => {
-      const flags = {};
-      for (let country of uniqueCountries) {
-        try {
-          const response = await axios.get(
-            `https://flagcdn.com/w320/${country.toLowerCase()}.png`
-          );
-          flags[country] = response.request.responseURL;
-        } catch (error) {
-          console.error(`Error al obtener bandera de ${country}:`, error);
-        }
+  const fetchFlags = list => {
+    const codes = [...new Set(list.map(r => r.country))];
+    codes.forEach(async code => {
+      try {
+        const resp = await axios.get(`https://flagcdn.com/w40/${code}.png`);
+        setFlagUrls(u => ({ ...u, [code]: resp.request.responseURL }));
+      } catch {
+        setFlagUrls(u => ({ ...u, [code]: null }));
       }
-      setFlagUrls(flags);
-    };
-
-    fetchFlagsData();
+    });
   };
 
-  const handleFilterChange = (e, filterTypeField) => {
-    const value = e.target.value;
-    if (filterTypeField === "status") {
-      setFilterStatus(value);
-    } else if (filterTypeField === "type") {
-      setFilterType(value);
-    }
-
-    let filtrados = relaciones;
-
-    if (value && filterTypeField === "status") {
-      filtrados = filtrados.filter((r) => r.status === value);
-    } else if (filterStatus) {
-      filtrados = filtrados.filter((r) => r.status === filterStatus);
-    }
-
-    if (value && filterTypeField === "type") {
-      filtrados = filtrados.filter((r) => r.type === value);
-    } else if (filterType) {
-      filtrados = filtrados.filter((r) => r.type === filterType);
-    }
-
-    if (filterStatus && filterType && filterTypeField !== "status" && filterTypeField !== "type") {
-      filtrados = relaciones.filter((r) => r.status === filterStatus && r.type === filterType);
-    }
-
-    if (!value && !filterStatus && !filterType) {
-      filtrados = relaciones;
-    }
-
-    setFilteredRelaciones(filtrados);
-  };
+  useEffect(() => {
+    let tmp = relaciones;
+    if (filterStatus) tmp = tmp.filter(r => r.status === filterStatus);
+    if (filterType)   tmp = tmp.filter(r => r.type   === filterType);
+    setFilteredRelaciones(tmp);
+  }, [relaciones, filterStatus, filterType]);
 
   const resetFilters = () => {
     setFilterStatus("");
     setFilterType("");
-    setFilteredRelaciones(relaciones);
   };
 
   const exportToCSV = () => {
     const csv = Papa.unparse(filteredRelaciones);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", "relaciones_internacionales_export.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "relaciones_internacionales.csv";
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
-  const statusClass = (status) => {
-    if (status === "active") return "status-employed";
-    if (status === "inactive") return "status-studying";
-    if (status === "pending") return "status-searching";
-    return "";
-  };
+  const statusLabel = s =>
+    s === "active"   ? "Activo" :
+    s === "inactive" ? "Inactivo" :
+    s === "pending"  ? "Pendiente" : s;
 
-  const statusLabel = (status) => {
-    if (status === "active") return "Activo";
-    if (status === "inactive") return "Inactivo";
-    if (status === "pending") return "Pendiente";
-    return status;
-  };
+  const statusClass = s =>
+    s === "active"   ? "status-employed" :
+    s === "inactive" ? "status-studying" :
+    s === "pending"  ? "status-searching" : "";
 
-  const typeLabel = (type) => {
-    if (type === "agreement") return "Convenio";
-    if (type === "mobility") return "Movilidad";
-    if (type === "network") return "Red";
-    if (type === "project") return "Proyecto";
-    return type;
-  };
+  const typeLabel = t =>
+    t === "agreement" ? "Convenio" :
+    t === "mobility"  ? "Movilidad" :
+    t === "network"   ? "Red" :
+    t === "project"   ? "Proyecto" : t;
 
-  const handleVerMasClick = (relacion) => {
-    setSelectedRelacion(relacion);
+  const handleVerMas = r => {
+    setSelectedRelacion(r);
     setShowModal(true);
   };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setSelectedRelacion(null);
-  };
+  const closeModal = () => setShowModal(false);
 
   return (
     <div className="impacto-container">
       <div className="impacto-header">
         <h1>Relaciones Internacionales</h1>
-        <p>Universidad Popular del Cesar - Ingeniería de Sistemas</p>
+        <p>Universidad Popular del Cesar – Ingeniería de Sistemas</p>
       </div>
 
       <div className="filter-section">
@@ -159,10 +104,8 @@ const Internacionalizacion = () => {
           <div className="filter-group">
             <label>Estado</label>
             <select
-              name="status"
-              id="status"
               value={filterStatus}
-              onChange={(e) => handleFilterChange(e, "status")}
+              onChange={e => setFilterStatus(e.target.value)}
             >
               <option value="">Todos</option>
               <option value="active">Activo</option>
@@ -173,15 +116,13 @@ const Internacionalizacion = () => {
           <div className="filter-group">
             <label>Tipo</label>
             <select
-              name="type"
-              id="type"
               value={filterType}
-              onChange={(e) => handleFilterChange(e, "type")}
+              onChange={e => setFilterType(e.target.value)}
             >
               <option value="">Todos</option>
               <option value="agreement">Convenio</option>
               <option value="mobility">Movilidad</option>
-              <option value="Network">Red</option>
+              <option value="network">Red</option>
               <option value="project">Proyecto</option>
             </select>
           </div>
@@ -212,34 +153,25 @@ const Internacionalizacion = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredRelaciones.map((relacion, index) => (
-                <tr key={index} className="proyecto-row">
-                  <td>{relacion.name}</td>
+              {filteredRelaciones.map((r,i) => (
+                <tr key={i} className="proyecto-row">
+                  <td>{r.name}</td>
                   <td>
-                    {flagUrls[relacion.country] ? (
-                      <img
-                        src={flagUrls[relacion.country]}
-                        alt={relacion.country}
-                        className="country-flag"
-                      />
-                    ) : (
-                      relacion.country
-                    )}
+                    {flagUrls[r.country] 
+                      ? <img src={flagUrls[r.country]} alt={r.country} className="country-flag"/>
+                      : r.country}
                   </td>
-                  <td>{relacion.institution}</td>
-                  <td>{typeLabel(relacion.type)}</td>
-                  <td className="year-cell">{relacion.startDate}</td>
-                  <td className="year-cell">{relacion.endDate}</td>
+                  <td>{r.institution}</td>
+                  <td>{typeLabel(r.type)}</td>
+                  <td className="year-cell">{r.startDate}</td>
+                  <td className="year-cell">{r.endDate}</td>
                   <td>
-                    <span className={`status-badge ${statusClass(relacion.status)}`}>
-                      {statusLabel(relacion.status)}
+                    <span className={`status-badge ${statusClass(r.status)}`}>
+                      {statusLabel(r.status)}
                     </span>
                   </td>
                   <td>
-                    <button
-                      className="contact-button-table email"
-                      onClick={() => handleVerMasClick(relacion)}
-                    >
+                    <button onClick={() => handleVerMas(r)} className="contact-button-table email">
                       Ver
                     </button>
                   </td>
@@ -266,7 +198,8 @@ const Internacionalizacion = () => {
         </div>
       )}
     </div>
-  );
+);
+
 };
 
 export default Internacionalizacion;
