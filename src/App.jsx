@@ -15,7 +15,7 @@ import ImpactoSocial from "./Componentes/ImpactoSocial/Impacto";
 import ProyectosEmpresa from "./Comp_Carlos/ProyectosEmpresa";
 import Internacionalizacion from "./Componentes/Internacionalizacion/internacionalizacion";
 import SalidasPracticas from "./Componentes/salidas_practicas/salidas_practicas";
-
+import Publicaciones from './Componentes/Publicaciones/PublicacionesSection';
 
 function App() {
   const [activeSection, setActiveSection] = useState("inicio");
@@ -141,6 +141,12 @@ function App() {
             >
               Salidas a Practicas
             </li>
+            <li
+              onClick={() => setActiveSection("publicaciones")}
+              className={activeSection === "publicaciones" ? "active" : ""}
+            >
+              Publicaciones
+            </li>
           </ul>
         </nav>
       </header>
@@ -221,8 +227,7 @@ function App() {
       {activeSection === "Impacto" && <ImpactoSocial />}
       {activeSection === "Internacionalizacion" && <Internacionalizacion />}
       {activeSection === "salidas_practicas" && <SalidasPracticas />}
-
-
+      {activeSection === "publicaciones" && <Publicaciones />}
       {activeSection === "proyectos_empresa" && <ProyectosEmpresa />}
 
       <footer className={`main-footer ${isDarkMode ? "dark-mode" : ""}`}>
