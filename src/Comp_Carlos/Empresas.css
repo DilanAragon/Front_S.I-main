@@ -40,21 +40,21 @@
 
 /* Filtros */
 .controles-filtros {
-  width: 80vw;                /* Ocupa todo el ancho de la ventana */
-  max-width: none;            /* Sin límite de ancho */
+  width: 80vw; /* Ocupa todo el ancho de la ventana */
+  max-width: none; /* Sin límite de ancho */
   position: relative;
   left: 50%;
   right: 50%;
   margin-left: -40vw;
   margin-right: -40vw;
- 
+
   padding: 32px 24px;
   margin-bottom: 32px;
   background: #181a20;
   border-radius: 28px;
   box-shadow: 0 2px 24px rgba(44, 62, 80, 0.18);
   display: flex;
-  flex-direction: row;         /* Cambia a row para alinear filtros y botones */
+  flex-direction: row; /* Cambia a row para alinear filtros y botones */
   align-items: center;
   gap: 32px;
   border: 2px solid #23272f;
@@ -69,7 +69,7 @@
 
 .filtros-superiores {
   display: flex;
-  flex-direction: row;         /* Horizontal */
+  flex-direction: row; /* Horizontal */
   gap: 24px;
   align-items: center;
   justify-content: flex-start; /* Alineados a la izquierda */
@@ -86,7 +86,7 @@
   font-weight: 500;
   transition: border 0.2s, box-shadow 0.2s;
   outline: none;
-  box-shadow: 0 1px 8px rgba(76, 175, 80, 0.10);
+  box-shadow: 0 1px 8px rgba(76, 175, 80, 0.1);
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg width='16' height='10' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%234caf50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -96,7 +96,7 @@
 
 .selector-filtro:focus,
 .selector-filtro:hover {
-  border-color: #90C074;
+  border-color: #90c074;
   box-shadow: 0 2px 12px rgba(144, 192, 116, 0.13);
 }
 
@@ -127,7 +127,7 @@
 }
 
 .boton-exportar {
-  background: linear-gradient(90deg, #388e3c 60%, #90C074 100%);
+  background: linear-gradient(90deg, #388e3c 60%, #90c074 100%);
 }
 
 .boton-reiniciar:hover,
@@ -143,7 +143,7 @@
   margin: 0 auto 24px auto;
   padding: 18px 24px;
   background: #181a20;
-  box-shadow: 0 2px 24px rgba(44, 62, 80, 0.10);
+  box-shadow: 0 2px 24px rgba(44, 62, 80, 0.1);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -191,7 +191,7 @@
   background-color: #fff;
   color: #222;
   font-weight: 500;
-  box-shadow: 0 1px 8px rgba(76, 175, 80, 0.10);
+  box-shadow: 0 1px 8px rgba(76, 175, 80, 0.1);
   transition: border 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
   outline: none;
 }
@@ -208,7 +208,7 @@
 .filter-group select:focus,
 .filter-group input[type="text"]:hover,
 .filter-group input[type="text"]:focus {
-  border-color: #90C074;
+  border-color: #90c074;
   box-shadow: 0 2px 12px rgba(144, 192, 116, 0.13);
 }
 
@@ -326,7 +326,7 @@
 
 .app-container.dark-mode .tabla-datos {
   background-color: #23272f;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.18);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.18);
 }
 
 /* DataTable Head */
@@ -335,7 +335,7 @@
 }
 
 .rdt_TableHead {
-  background: #4CAF50 !important;
+  background: #4caf50 !important;
   color: white !important;
   font-size: 0.95rem !important;
   font-weight: 700 !important;
@@ -460,21 +460,21 @@
   .controles-filtros {
     grid-template-columns: 1fr;
   }
-  
+
   .cabecera-seccion h1 {
     font-size: 1.8rem;
   }
-  
+
   .contenedor-botones {
     flex-direction: column;
   }
-  
+
   .boton-primario,
   .boton-secundario {
     width: 100%;
     justify-content: center;
   }
-  
+
   .rdt_TableCell {
     padding: 12px 15px !important;
     font-size: 0.85rem !important;
@@ -515,6 +515,132 @@
 
 /* Efectos de carga */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Botón de exportar */
+.export-button {
+  background-color: #2196f3;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  align-self: flex-end;
+  margin-top: 24px;
+  transition: background-color 0.3s;
+}
+
+.app-container.dark-mode .export-button {
+  background-color: #1976d2;
+  color: #fff;
+}
+
+.export-button:hover {
+  background-color: #1976d2;
+}
+
+.app-container.dark-mode .export-button:hover {
+  background-color: #1565c0;
+}
+
+/* Mensajes de estado */
+.loading-message,
+.error-message {
+  text-align: center;
+  padding: 40px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.loading-message {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.app-container.dark-mode .loading-message {
+  background-color: #1a237e;
+  color: #90caf9;
+  border: 1px solid #3f51b5;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+.app-container.dark-mode .error-message {
+  background-color: #b71c1c;
+  color: #ffcdd2;
+  border: 1px solid #d32f2f;
+}
+
+/* Resumen de resultados */
+.results-summary {
+  text-align: center;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  color: #666;
+}
+
+.app-container.dark-mode .results-summary {
+  background-color: #23272f;
+  color: #bdbdbd;
+}
+
+/* Estados de empleabilidad adicionales */
+.status-entrepreneur {
+  background: linear-gradient(135deg, #fce4ec, #f8bbd9);
+  color: #c2185b;
+  border-left: 3px solid #c2185b;
+}
+
+.app-container.dark-mode .status-entrepreneur {
+  background: linear-gradient(135deg, #4a148c, #7b1fa2);
+  color: #e1bee7;
+  border-left: 3px solid #e1bee7;
+}
+
+.status-unemployed {
+  background: linear-gradient(135deg, #ffebee, #ffcdd2);
+  color: #d32f2f;
+  border-left: 3px solid #d32f2f;
+}
+
+.app-container.dark-mode .status-unemployed {
+  background: linear-gradient(135deg, #b71c1c, #d32f2f);
+  color: #ffcdd2;
+  border-left: 3px solid #ffcdd2;
+}
+
+.status-default {
+  background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+  color: #757575;
+  border-left: 3px solid #757575;
+}
+
+.app-container.dark-mode .status-default {
+  background: linear-gradient(135deg, #424242, #616161);
+  color: #bdbdbd;
+  border-left: 3px solid #bdbdbd;
+}
+
+/* Responsive para los nuevos botones */
+@media (max-width: 768px) {
+  .export-button {
+    margin-top: 10px;
+    width: 100%;
+  }
 }

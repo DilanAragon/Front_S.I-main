@@ -3,34 +3,24 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
 // Función para exportar a CSV
-export const downloadCSV = (data, filename) => {
+export const downloadCSV = (
+  estadisticas,
+  filename = "dashboard_estadisticas"
+) => {
   let csvContent = "data:text/csv;charset=utf-8,";
 
-  csvContent += "Estadísticas Generales\n";
-  // Corregido para usar statsData en lugar de stats
-  Object.entries(data.statsData || {}).forEach(([key, value]) => {
-    csvContent += `${key},${value}\n`;
-  });
+  // Encabezado
+  csvContent += "Sistema Integrado de Visibilidad y Vinculación Externa\n";
+  csvContent +=
+    "Programa de Ingeniería de Sistemas - Universidad Popular del Cesar\n\n";
 
-  csvContent += "\nDatos de Docentes\n";
+  // Todas las estadísticas
   csvContent += "Categoría,Valor\n";
-  (data.professorData || []).forEach((item) => {
-    csvContent += `${item.name},${item.value}\n`;
+  estadisticas.forEach((stat) => {
+    csvContent += `${stat.categoria},${stat.value}\n`;
   });
 
-  csvContent += "\nProducción Académica\n";
-  csvContent += "Categoría,Valor\n";
-  (data.productionData || []).forEach((item) => {
-    csvContent += `${item.name},${item.value}\n`;
-  });
-
-  csvContent += "\nEgresados por Año\n";
-  csvContent += "Año,Cantidad\n";
-  (data.graduatesPerYearData || []).forEach((item) => {
-    csvContent += `${item.year},${item.value}\n`;
-  });
-
-  // Crear el enlace de descarga y simulamos un clic
+  // Crear el enlace de descarga
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
@@ -41,256 +31,419 @@ export const downloadCSV = (data, filename) => {
 };
 
 // Función para exportar a Excel
-export const downloadExcel = (data, filename) => {
+export const downloadExcel = (
+  estadisticas,
+  filename = "dashboard_estadisticas"
+) => {
   const workbook = XLSX.utils.book_new();
 
-  // Datos para la hoja de estadísticas generales
-  const statsData = Object.entries(data.statsData || {}).map(([key, value]) => [
-    key,
-    value,
-  ]);
-  const statsSheet = XLSX.utils.aoa_to_sheet([
-    ["Indicador", "Valor"],
-    ...statsData,
+  // Crear hoja principal con todas las estadísticas
+  const allStatsData = estadisticas.map((stat) => [stat.categoria, stat.value]);
+  const mainSheet = XLSX.utils.aoa_to_sheet([
+    ["Categoría", "Valor"],
+    ...allStatsData,
   ]);
 
-  // Datos para la hoja de docentes
-  const professorHeaders = ["Categoría", "Valor"];
-  const professorRows = (data.professorData || []).map((item) => [
-    item.name,
-    item.value,
-  ]);
-  const professorSheet = XLSX.utils.aoa_to_sheet([
-    professorHeaders,
-    ...professorRows,
+  // Crear hojas por categorías
+  const proyectosData = [
+    [
+      "Proyectos",
+      estadisticas.find((s) => s.categoria === "Proyectos")?.value || 0,
+    ],
+    [
+      "Eventos",
+      estadisticas.find((s) => s.categoria === "Eventos")?.value || 0,
+    ],
+    [
+      "Talleres",
+      estadisticas.find((s) => s.categoria === "Talleres")?.value || 0,
+    ],
+    [
+      "Charlas",
+      estadisticas.find((s) => s.categoria === "Charlas")?.value || 0,
+    ],
+  ];
+  const proyectosSheet = XLSX.utils.aoa_to_sheet([
+    ["Actividad", "Cantidad"],
+    ...proyectosData,
   ]);
 
-  // Datos para la hoja de producción académica
-  const productionHeaders = ["Categoría", "Valor"];
-  const productionRows = (data.productionData || []).map((item) => [
-    item.name,
-    item.value,
-  ]);
-  const productionSheet = XLSX.utils.aoa_to_sheet([
-    productionHeaders,
-    ...productionRows,
+  const participacionData = [
+    [
+      "Participantes",
+      estadisticas.find((s) => s.categoria === "Participantes")?.value || 0,
+    ],
+    [
+      "Beneficiarios",
+      estadisticas.find((s) => s.categoria === "Beneficiarios")?.value || 0,
+    ],
+    [
+      "Capacitados",
+      estadisticas.find((s) => s.categoria === "Capacitados")?.value || 0,
+    ],
+    [
+      "Jóvenes",
+      estadisticas.find((s) => s.categoria === "Jovenes")?.value || 0,
+    ],
+    [
+      "Adultos Mayores",
+      estadisticas.find((s) => s.categoria === "AdultosMayores")?.value || 0,
+    ],
+    [
+      "Voluntarios",
+      estadisticas.find((s) => s.categoria === "Voluntarios")?.value || 0,
+    ],
+  ];
+  const participacionSheet = XLSX.utils.aoa_to_sheet([
+    ["Categoría", "Cantidad"],
+    ...participacionData,
   ]);
 
-  // Datos para la hoja de egresados por año
-  const graduatesHeaders = ["Año", "Cantidad"];
-  const graduatesRows = (data.graduatesPerYearData || []).map((item) => [
-    item.year,
-    item.value,
+  const alianzasData = [
+    [
+      "Alianzas",
+      estadisticas.find((s) => s.categoria === "Alianzas")?.value || 0,
+    ],
+    [
+      "Clientes",
+      estadisticas.find((s) => s.categoria === "Clientes")?.value || 0,
+    ],
+    [
+      "Patrocinadores",
+      estadisticas.find((s) => s.categoria === "Patrocinadores")?.value || 0,
+    ],
+    ["Países", estadisticas.find((s) => s.categoria === "Países")?.value || 0],
+    [
+      "Consultorias",
+      estadisticas.find((s) => s.categoria === "Consultorias")?.value || 0,
+    ],
+    [
+      "Donaciones",
+      estadisticas.find((s) => s.categoria === "Donaciones")?.value || 0,
+    ],
+  ];
+  const alianzasSheet = XLSX.utils.aoa_to_sheet([
+    ["Categoría", "Cantidad"],
+    ...alianzasData,
   ]);
-  const graduatesSheet = XLSX.utils.aoa_to_sheet([
-    graduatesHeaders,
-    ...graduatesRows,
+
+  const innovacionData = [
+    [
+      "Innovación",
+      estadisticas.find((s) => s.categoria === "Innovacion")?.value || 0,
+    ],
+    [
+      "Aplicaciones",
+      estadisticas.find((s) => s.categoria === "Aplicaciones")?.value || 0,
+    ],
+    ["TICs", estadisticas.find((s) => s.categoria === "Tics")?.value || 0],
+    [
+      "Sostenibilidad",
+      estadisticas.find((s) => s.categoria === "Sostenibilidad")?.value || 0,
+    ],
+    [
+      "Publicaciones",
+      estadisticas.find((s) => s.categoria === "Publicaciones")?.value || 0,
+    ],
+    [
+      "Materiales",
+      estadisticas.find((s) => s.categoria === "Materiales")?.value || 0,
+    ],
+  ];
+  const innovacionSheet = XLSX.utils.aoa_to_sheet([
+    ["Categoría", "Cantidad"],
+    ...innovacionData,
   ]);
 
   // Añadir hojas al libro
-  XLSX.utils.book_append_sheet(workbook, statsSheet, "Estadísticas Generales");
-  XLSX.utils.book_append_sheet(workbook, professorSheet, "Docentes");
+  XLSX.utils.book_append_sheet(workbook, mainSheet, "Todas las Estadísticas");
   XLSX.utils.book_append_sheet(
     workbook,
-    productionSheet,
-    "Producción Académica"
+    proyectosSheet,
+    "Proyectos y Actividades"
   );
-  XLSX.utils.book_append_sheet(workbook, graduatesSheet, "Egresados por Año");
+  XLSX.utils.book_append_sheet(workbook, participacionSheet, "Participación");
+  XLSX.utils.book_append_sheet(workbook, alianzasSheet, "Alianzas");
+  XLSX.utils.book_append_sheet(workbook, innovacionSheet, "Innovación");
 
   // Exportar a Excel
   XLSX.writeFile(workbook, `${filename}.xlsx`);
 };
 
-// Nueva implementación de la función PDF
-export const downloadPDF = (data, filename) => {
+// Función para exportar a PDF
+export const downloadPDF = (
+  estadisticas,
+  filename = "dashboard_estadisticas"
+) => {
   try {
-    // Crear un nuevo documento PDF
     const doc = new jsPDF();
 
-    // Título del documento
-    doc.setFontSize(16);
-    doc.text("Estadísticas del Programa de Ingeniería de Sistemas", 14, 20);
-    doc.setFontSize(12);
-    doc.text("Universidad Popular del Cesar", 14, 30);
+    // Función helper para obtener valor por categoría
+    const getValueByCategory = (categoria) => {
+      const item = estadisticas.find((stat) => stat.categoria === categoria);
+      return item ? parseInt(item.value) : 0;
+    };
 
-    // Variables para posicionamiento
-    let yPos = 40;
+    // Configuración inicial
+    doc.setFontSize(18);
+    doc.setTextColor(40, 40, 40);
+    doc.text("Dashboard Analítico", 105, 20, { align: "center" });
+
+    doc.setFontSize(14);
+    doc.text(
+      "Sistema Integrado de Visibilidad y Vinculación Externa",
+      105,
+      30,
+      { align: "center" }
+    );
+
+    doc.setFontSize(12);
+    doc.text("Programa de Ingeniería de Sistemas", 105, 40, {
+      align: "center",
+    });
+    doc.text("Universidad Popular del Cesar", 105, 50, { align: "center" });
+
+    let yPos = 70;
 
     // ===== PÁGINA 1: ESTADÍSTICAS GENERALES =====
-    doc.setFontSize(14);
+    doc.setFontSize(16);
+    doc.setTextColor(76, 175, 80);
     doc.text("Estadísticas Generales", 14, yPos);
-    yPos += 10;
+    yPos += 15;
 
-    // Dibujar tabla simple sin usar autoTable
-    doc.setFontSize(11);
-    doc.setTextColor(255, 255, 255);
-    doc.setFillColor(41, 128, 185);
-    doc.rect(14, yPos, 80, 8, "F");
-    doc.rect(94, yPos, 30, 8, "F");
-    doc.text("Indicador", 16, yPos + 5.5);
-    doc.text("Valor", 96, yPos + 5.5);
-    yPos += 8;
+    // Indicadores principales
+    const mainIndicators = [
+      ["Proyectos", getValueByCategory("Proyectos")],
+      ["Beneficiarios", getValueByCategory("Beneficiarios").toLocaleString()],
+      ["Satisfacción", getValueByCategory("Satisfacción") + "%"],
+      ["Metas Cumplidas", getValueByCategory("Metas") + "%"],
+      ["Horas de Formación", getValueByCategory("HorasFormación")],
+      [
+        "Financiamiento",
+        "$" + getValueByCategory("Financiamiento").toLocaleString(),
+      ],
+    ];
 
-    // Filas de datos
-    doc.setTextColor(0, 0, 0);
-    let rowCount = 0;
-
-    // Convertir labels a más legibles
-    Object.entries(data.statsData || {}).forEach(([key, value]) => {
-      let label = key
-        .replace(/_/g, " ")
-        .replace(/\b\w/g, (l) => l.toUpperCase());
-
-      // Alternar colores de fondo para las filas
-      if (rowCount % 2 === 0) {
-        doc.setFillColor(240, 240, 240);
-      } else {
-        doc.setFillColor(255, 255, 255);
-      }
-
-      doc.rect(14, yPos, 80, 8, "F");
-      doc.rect(94, yPos, 30, 8, "F");
-      doc.text(label, 16, yPos + 5.5);
-      doc.text(value.toString(), 96, yPos + 5.5);
-
-      yPos += 8;
-      rowCount++;
-
-      // Si llegamos al final de la página, empezar una nueva
-      if (yPos > 270) {
-        doc.addPage();
-        yPos = 20;
-      }
+    doc.autoTable({
+      startY: yPos,
+      head: [["Indicador", "Valor"]],
+      body: mainIndicators,
+      theme: "striped",
+      headStyles: { fillColor: [76, 175, 80] },
+      styles: { fontSize: 11 },
+      margin: { left: 14 },
     });
 
-    // ===== PÁGINA 2: DOCENTES =====
+    yPos = doc.lastAutoTable.finalY + 20;
+
+    // Actividades del programa
+    doc.setFontSize(14);
+    doc.setTextColor(40, 40, 40);
+    doc.text("Actividades del Programa", 14, yPos);
+    yPos += 10;
+
+    const actividadesData = [
+      ["Proyectos", getValueByCategory("Proyectos")],
+      ["Eventos", getValueByCategory("Eventos")],
+      ["Talleres", getValueByCategory("Talleres")],
+      ["Charlas", getValueByCategory("Charlas")],
+    ];
+
+    doc.autoTable({
+      startY: yPos,
+      head: [["Actividad", "Cantidad"]],
+      body: actividadesData,
+      theme: "grid",
+      headStyles: { fillColor: [33, 150, 243] },
+      styles: { fontSize: 10 },
+      margin: { left: 14 },
+    });
+
+    // ===== PÁGINA 2: PARTICIPACIÓN =====
     doc.addPage();
     yPos = 20;
 
-    doc.setFontSize(14);
-    doc.text("Nivel Académico de Docentes", 14, yPos);
-    yPos += 10;
+    doc.setFontSize(16);
+    doc.setTextColor(76, 175, 80);
+    doc.text("Participación y Demografía", 14, yPos);
+    yPos += 15;
 
-    // Dibujar encabezado para docentes
-    doc.setFontSize(11);
-    doc.setTextColor(255, 255, 255);
-    doc.setFillColor(41, 128, 185);
-    doc.rect(14, yPos, 80, 8, "F");
-    doc.rect(94, yPos, 30, 8, "F");
-    doc.text("Categoría", 16, yPos + 5.5);
-    doc.text("Cantidad", 96, yPos + 5.5);
-    yPos += 8;
+    const participacionData = [
+      [
+        "Total Participantes",
+        getValueByCategory("Participantes").toLocaleString(),
+      ],
+      ["Capacitados", getValueByCategory("Capacitados")],
+      ["Jóvenes", getValueByCategory("Jovenes").toLocaleString()],
+      ["Adultos Mayores", getValueByCategory("AdultosMayores")],
+      ["Voluntarios", getValueByCategory("Voluntarios")],
+      ["Comunidades Apoyadas", getValueByCategory("Comunidades")],
+    ];
 
-    // Filas de datos para docentes
-    doc.setTextColor(0, 0, 0);
-    rowCount = 0;
-
-    (data.professorData || []).forEach((item) => {
-      // Alternar colores de fondo
-      if (rowCount % 2 === 0) {
-        doc.setFillColor(240, 240, 240);
-      } else {
-        doc.setFillColor(255, 255, 255);
-      }
-
-      doc.rect(14, yPos, 80, 8, "F");
-      doc.rect(94, yPos, 30, 8, "F");
-      doc.text(item.name, 16, yPos + 5.5);
-      doc.text(item.value.toString(), 96, yPos + 5.5);
-
-      yPos += 8;
-      rowCount++;
+    doc.autoTable({
+      startY: yPos,
+      head: [["Categoría", "Cantidad"]],
+      body: participacionData,
+      theme: "striped",
+      headStyles: { fillColor: [76, 175, 80] },
+      styles: { fontSize: 11 },
+      margin: { left: 14 },
     });
 
-    // ===== PÁGINA 3: PRODUCCIÓN ACADÉMICA =====
+    yPos = doc.lastAutoTable.finalY + 20;
+
+    // Distribución geográfica
+    doc.setFontSize(14);
+    doc.setTextColor(40, 40, 40);
+    doc.text("Distribución Geográfica", 14, yPos);
+    yPos += 10;
+
+    const geograficaData = [
+      ["Zona Rural", getValueByCategory("Rural") + " proyectos"],
+      ["Zona Urbana", getValueByCategory("Urbano") + " proyectos"],
+      ["Modalidad Presencial", getValueByCategory("Presencial") + "%"],
+      ["Modalidad Virtual", getValueByCategory("Virtual") + "%"],
+      ["Modalidad Mixta", getValueByCategory("Mixto") + "%"],
+    ];
+
+    doc.autoTable({
+      startY: yPos,
+      head: [["Ubicación/Modalidad", "Valor"]],
+      body: geograficaData,
+      theme: "grid",
+      headStyles: { fillColor: [255, 152, 0] },
+      styles: { fontSize: 10 },
+      margin: { left: 14 },
+    });
+
+    // ===== PÁGINA 3: ALIANZAS Y COLABORACIONES =====
     doc.addPage();
     yPos = 20;
 
-    doc.setFontSize(14);
-    doc.text("Producción Académica", 14, yPos);
-    yPos += 10;
+    doc.setFontSize(16);
+    doc.setTextColor(76, 175, 80);
+    doc.text("Alianzas y Colaboraciones", 14, yPos);
+    yPos += 15;
 
-    // Dibujar encabezado para producción
-    doc.setFontSize(11);
-    doc.setTextColor(255, 255, 255);
-    doc.setFillColor(41, 128, 185);
-    doc.rect(14, yPos, 80, 8, "F");
-    doc.rect(94, yPos, 30, 8, "F");
-    doc.text("Categoría", 16, yPos + 5.5);
-    doc.text("Cantidad", 96, yPos + 5.5);
-    yPos += 8;
+    const alianzasData = [
+      ["Alianzas Estratégicas", getValueByCategory("Alianzas")],
+      ["Empresas Clientes", getValueByCategory("Clientes")],
+      ["Patrocinadores", getValueByCategory("Patrocinadores")],
+      ["Presencia Internacional", getValueByCategory("Países") + " países"],
+      ["Consultorias Brindadas", getValueByCategory("Consultorias")],
+      ["Donaciones Recibidas", getValueByCategory("Donaciones")],
+      ["Premios Obtenidos", getValueByCategory("Premios")],
+    ];
 
-    // Filas de datos para producción
-    doc.setTextColor(0, 0, 0);
-    rowCount = 0;
-
-    (data.productionData || []).forEach((item) => {
-      // Alternar colores de fondo
-      if (rowCount % 2 === 0) {
-        doc.setFillColor(240, 240, 240);
-      } else {
-        doc.setFillColor(255, 255, 255);
-      }
-
-      doc.rect(14, yPos, 80, 8, "F");
-      doc.rect(94, yPos, 30, 8, "F");
-      doc.text(item.name, 16, yPos + 5.5);
-      doc.text(item.value.toString(), 96, yPos + 5.5);
-
-      yPos += 8;
-      rowCount++;
+    doc.autoTable({
+      startY: yPos,
+      head: [["Categoría", "Cantidad"]],
+      body: alianzasData,
+      theme: "striped",
+      headStyles: { fillColor: [76, 175, 80] },
+      styles: { fontSize: 11 },
+      margin: { left: 14 },
     });
 
-    // ===== PÁGINA 4: EGRESADOS POR AÑO =====
+    yPos = doc.lastAutoTable.finalY + 20;
+
+    // Indicadores operativos
+    doc.setFontSize(14);
+    doc.setTextColor(40, 40, 40);
+    doc.text("Indicadores Operativos", 14, yPos);
+    yPos += 10;
+
+    const operativosData = [
+      ["Reuniones Anuales", getValueByCategory("Reuniones")],
+      ["Propuestas Presentadas", getValueByCategory("Propuestas")],
+      ["Colaboradores", getValueByCategory("Colaboradores")],
+      ["Estudios de Caso", getValueByCategory("EstudiosCaso")],
+    ];
+
+    doc.autoTable({
+      startY: yPos,
+      head: [["Indicador", "Cantidad"]],
+      body: operativosData,
+      theme: "grid",
+      headStyles: { fillColor: [156, 39, 176] },
+      styles: { fontSize: 10 },
+      margin: { left: 14 },
+    });
+
+    // ===== PÁGINA 4: INNOVACIÓN Y TECNOLOGÍA =====
     doc.addPage();
     yPos = 20;
 
-    doc.setFontSize(14);
-    doc.text("Egresados por Año", 14, yPos);
-    yPos += 10;
+    doc.setFontSize(16);
+    doc.setTextColor(76, 175, 80);
+    doc.text("Innovación y Tecnología", 14, yPos);
+    yPos += 15;
 
-    // Dibujar encabezado para egresados
-    doc.setFontSize(11);
-    doc.setTextColor(255, 255, 255);
-    doc.setFillColor(41, 128, 185);
-    doc.rect(14, yPos, 30, 8, "F");
-    doc.rect(44, yPos, 30, 8, "F");
-    doc.text("Año", 16, yPos + 5.5);
-    doc.text("Cantidad", 46, yPos + 5.5);
-    yPos += 8;
+    const innovacionData = [
+      ["Proyectos Innovadores", getValueByCategory("Innovacion")],
+      ["Aplicaciones Desarrolladas", getValueByCategory("Aplicaciones")],
+      ["Tecnologías Aplicadas", getValueByCategory("Tics")],
+      ["Proyectos Sostenibles", getValueByCategory("Sostenibilidad")],
+      ["Publicaciones", getValueByCategory("Publicaciones")],
+      ["Materiales Educativos", getValueByCategory("Materiales")],
+      ["Testimonios", getValueByCategory("Testimonios")],
+    ];
 
-    // Filas de datos para egresados
-    doc.setTextColor(0, 0, 0);
-    rowCount = 0;
-
-    (data.graduatesPerYearData || []).forEach((item) => {
-      // Alternar colores de fondo
-      if (rowCount % 2 === 0) {
-        doc.setFillColor(240, 240, 240);
-      } else {
-        doc.setFillColor(255, 255, 255);
-      }
-
-      doc.rect(14, yPos, 30, 8, "F");
-      doc.rect(44, yPos, 30, 8, "F");
-      doc.text(item.year, 16, yPos + 5.5);
-      doc.text(item.value.toString(), 46, yPos + 5.5);
-
-      yPos += 8;
-      rowCount++;
+    doc.autoTable({
+      startY: yPos,
+      head: [["Categoría", "Cantidad"]],
+      body: innovacionData,
+      theme: "striped",
+      headStyles: { fillColor: [76, 175, 80] },
+      styles: { fontSize: 11 },
+      margin: { left: 14 },
     });
 
-    // Agregar fecha de generación en todas las páginas
+    yPos = doc.lastAutoTable.finalY + 20;
+
+    // Métricas de calidad
+    doc.setFontSize(14);
+    doc.setTextColor(40, 40, 40);
+    doc.text("Métricas de Calidad y Alcance", 14, yPos);
+    yPos += 10;
+
+    const calidadData = [
+      ["Encuestas Realizadas", getValueByCategory("Encuestas")],
+      ["Solicitudes Atendidas", getValueByCategory("Solicitudes")],
+      ["Indicadores Monitoreados", getValueByCategory("Indicadores")],
+      ["Visitas Web", getValueByCategory("VisitasWeb").toLocaleString()],
+      [
+        "Seguidores Redes Sociales",
+        getValueByCategory("RedesSociales").toLocaleString(),
+      ],
+      ["Ferias Participadas", getValueByCategory("Ferias")],
+      ["Diagnósticos Realizados", getValueByCategory("Diagnosticos")],
+      ["Practicantes", getValueByCategory("Practicantes")],
+    ];
+
+    doc.autoTable({
+      startY: yPos,
+      head: [["Métrica", "Valor"]],
+      body: calidadData,
+      theme: "grid",
+      headStyles: { fillColor: [33, 150, 243] },
+      styles: { fontSize: 10 },
+      margin: { left: 14 },
+    });
+
+    // Agregar fecha de generación y numeración
     const pageCount = doc.internal.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
       const today = new Date();
-      const dateStr = today.toLocaleDateString();
-      doc.setFontSize(10);
+      const dateStr = today.toLocaleDateString("es-ES");
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100);
       doc.text(
         `Documento generado el ${dateStr} - Página ${i} de ${pageCount}`,
-        14,
-        doc.internal.pageSize.height - 10
+        105,
+        doc.internal.pageSize.height - 10,
+        { align: "center" }
       );
     }
 
@@ -303,4 +456,30 @@ export const downloadPDF = (data, filename) => {
       `Ha ocurrido un error al generar el PDF. Revise la consola para más detalles: ${error.message}`
     );
   }
+};
+
+// Función para importar datos desde CSV
+export const importFromCSV = (file, callback) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text = e.target.result;
+    const lines = text.split("\n");
+    const importedData = [];
+
+    // Buscar líneas que contengan datos válidos (formato: categoria,valor)
+    lines.forEach((line) => {
+      if (line.trim() && line.includes(",") && !line.includes("Categoría")) {
+        const [categoria, value] = line.split(",");
+        if (categoria && value && !isNaN(value.trim())) {
+          importedData.push({
+            categoria: categoria.trim(),
+            value: parseInt(value.trim()) || 0,
+          });
+        }
+      }
+    });
+
+    callback(importedData);
+  };
+  reader.readAsText(file);
 };
