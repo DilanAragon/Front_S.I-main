@@ -1,0 +1,42 @@
+.listaContainer {
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.subtitulo {
+  margin-bottom: 0.75rem;
+  color: #4a9d5c;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.eventosTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.eventosTable th,
+.eventosTable td {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.eventosTable th {
+  background: #4a9d5c;
+  color: white;
+  font-weight: 600;
+}
+
+.eventosTable tr:hover {
+  background: #f5faff;
+}
+
+.error {
+  color: crimson;
+  padding: 1rem;
+  background: #ffe5e5;
+  border-radius: 4px;
+}

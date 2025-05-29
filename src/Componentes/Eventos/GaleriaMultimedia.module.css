@@ -1,654 +1,608 @@
-*{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .galeriaContainer {
-    width: 100%;
-    background-color: #f9f9f9;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px 0;
-  }
-  
-  .tituloBarra {
-    background-color: #4a9d5c;
-    color: white;
-    padding: 18px 25px;
-    border-radius: 8px 8px 0 0;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .tituloBarra h2 {
-    margin: 0;
-    font-size: 1.8em;
-    font-weight: 600;
-    color: white;
-  }
-  
-  .contenido {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-  }
-  
-  /* Sección de navegación por pestañas */
-  .seccionEventos {
-    max-width: 600px;
-    margin: 40px auto;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
-    padding: 32px 24px 24px 24px;
-    position: relative;
-  }
-  
-  .seccionEventos h3 {
-    color: #4a9d5c;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    font-weight: 600;
-    position: relative;
-    padding-bottom: 10px;
-    text-align: center; /* Centramos el texto del título */
-  }
-  
-  .seccionEventos h3::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%; /* Posicionamos el inicio de la línea en el centro */
-    transform: translateX(-50%); /* Centramos la línea */
-    width: 60px;
-    height: 3px;
-    background-color: #4a9d5c;
-    border-radius: 2px;
-  }
-  
-  .eventosHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
-  }
-  
-  .eventosHeader h3 {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin: 0;
-  }
-  
-  .pauseButton {
-    background: #f1c40f;
-    border: none;
-    color: #222;
-    font-weight: bold;
-    border-radius: 6px;
-    padding: 7px 18px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .pauseButton:hover {
-    background: #f39c12;
-  }
-  
-  .singleCarouselContainer { /* Nuevo nombre para el contenedor del carrusel individual */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 100%;
-    max-width: 1500px;
-    margin: 0 auto;
-    padding: 0;
-    background: transparent;
-    overflow-y: hidden; /* Oculta la barra de scroll vertical solo en el carrusel */
-  }
-  
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.galeriaContainer {
+  width: 100%;
+  background-color: #f9f9f9;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.tituloBarra {
+  background-color: #4a9d5c;
+  color: white;
+  padding: 18px 25px;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tituloBarra h2 {
+  margin: 0;
+  font-size: 1.8em;
+  font-weight: 600;
+  color: white;
+}
+
+.contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Navegación por pestañas */
+.tabNav {
+  display: flex;
+  gap: 1rem;               /* separa los botones */
+  justify-content: center; /* centra la fila */
+  margin-bottom: 1.5rem;
+}
+
+.tabButton {
+  padding: 0.6rem 1.2rem;         /* más espacio */
+  border: none;
+  background: #4a9d5c;
+  color: white;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+
+.tabButton:hover {
+  background: #3d844c;
+  transform: translateY(-1px);
+}
+
+.tabButton.active {
+  background: #32703f;
+}
+
+/* Sección de navegación por pestañas */
+.seccionEventos {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 32px 24px 24px 24px;
+  position: relative;
+}
+
+.seccionEventos h3 {
+  color: #4a9d5c;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.seccionEventos h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: #4a9d5c;
+  border-radius: 2px;
+}
+
+.eventosHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.eventosHeader h3 {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.pauseButton {
+  background: #f1c40f;
+  border: none;
+  color: #222;
+  font-weight: bold;
+  border-radius: 6px;
+  padding: 7px 18px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.pauseButton:hover {
+  background: #f39c12;
+}
+
+/* Carrusel individual */
+.singleCarouselContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  overflow-y: hidden;
+}
+
+.carouselBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7;
+  z-index: 10;
+  background: rgba(44, 62, 80, 0.45);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 2.2rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s, opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prevBtn {
+  left: 24px;
+}
+.nextBtn {
+  right: 24px;
+}
+.carouselBtn:hover {
+  background: rgba(41, 128, 185, 0.85);
+  opacity: 1;
+  transform: scale(1.1) translateY(-50%);
+}
+@media (max-width: 768px) {
   .carouselBtn {
-    position: absolute;         /* Antes: fixed */
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.7;
-    z-index: 10;
-    background: rgba(44, 62, 80, 0.45);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    font-size: 2.2rem;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s, opacity 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: none;
   }
-  .prevBtn {
-    left: 24px;
-    right: auto;
-    margin: 0;
-  }
-  .nextBtn {
-    right: 24px;
-    left: auto;
-    margin: 0;
-  }
-  
-  .carouselBtn:hover {
-    background: rgba(41, 128, 185, 0.85);
-    opacity: 1;
-    transform: scale(1.1) translateY(-50%);
-  }
-  
-  /* Opcional: Oculta las flechas en móvil */
-  @media (max-width: 768px) {
-    .carouselBtn {
-      display: none;
-    }
-  }
-  
-  .singleEventoContainer { /* Nuevo nombre para el contenedor del evento individual */
-    width: 100%;
-    max-width: 1500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 340px;
-    position: relative;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .eventoSlide {
-    /* Mantenemos la lógica de mostrar/ocultar con activeSlide */
+}
+
+.singleEventoContainer {
+  width: 100%;
+  max-width: 1500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 340px;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.eventoSlide {
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.activeSlide {
+  opacity: 1;
+  position: relative;
+  pointer-events: auto;
+}
+
+.eventoCard {
+  width: 100%;
+  max-width: 1500px;
+  height: 650px;
+  margin: 0 auto;
+  background: transparent;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border: 8px solid #fff;
+}
+.eventoCardA {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.eventoImageContainer {
+  width: 100%;
+  height: 100%;
+  min-height: 650px;
+  overflow: hidden;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: 0;
+  box-shadow: none;
+}
+.eventoImagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.4s;
+  display: block;
+}
+.eventoCardA:hover .eventoImagen {
+  transform: scale(1.05);
+}
+
+.eventoInfo {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(0deg, rgba(44,62,80,0.85) 80%, transparent 100%);
+  color: #fff;
+  padding: 30px 16px 18px 16px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+.eventoCardA:hover .eventoInfo {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.eventoTitulo {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.eventoFecha {
+  font-size: 1.08rem;
+  color: #e0e0e0;
+}
+
+.carouselIndicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  gap: 8px;
+  width: 100%;
+  order: 2;
+}
+.indicator {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #d0d3d4;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  border: 2px solid transparent;
+}
+.activeIndicator {
+  background: #2980b9;
+  border-color: #2980b9;
+  transform: scale(1.15);
+}
+
+/* Sección de Fotos */
+.seccionFotos {
+  margin-bottom: 35px;
+}
+
+.seccionFotos h3 {
+  color: #4a9d5c;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 10px;
+}
+.seccionFotos h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #4a9d5c;
+  border-radius: 2px;
+}
+
+.gridImagenes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.imagenWrapper {
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  position: relative;
+}
+
+.imagenGaleria {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  display: block;
+}
+.imagenWrapper:hover .imagenGaleria {
+  transform: scale(1.08);
+}
+
+.imagenOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.imagenWrapper:hover .imagenOverlay {
+  opacity: 1;
+}
+
+/* Sección de Videos */
+.seccionVideos {
+  margin-bottom: 35px;
+}
+
+.seccionVideos h3 {
+  color: #4a9d5c;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 10px;
+}
+.seccionVideos h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #4a9d5c;
+  border-radius: 2px;
+}
+
+.videoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 25px;
+}
+
+.videoItem {
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+.videoItem:hover {
+  transform: translateY(-5px);
+}
+
+.videoItemHeader {
+  padding: 15px;
+  background-color: #4a9d5c;
+  color: white;
+}
+
+.videoItemHeader h4 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.videoContainer {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+}
+.videoContainer iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.videoInfo {
+  padding: 15px;
+}
+.videoInfo p {
+  margin: 0;
+  color: #666;
+  font-size: 0.95em;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
     opacity: 0;
-    transition: opacity 0.7s cubic-bezier(.4,0,.2,1);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
+    transform: translateY(10px);
   }
-  .activeSlide {
+  to {
     opacity: 1;
-    position: relative;
+    transform: translateY(0);
+  }
+}
+
+/* Consultas de medios para respuesta */
+@media (max-width: 1200px) {
+  .videoGrid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .galeriaContainer {
+    padding: 15px;
+  }
+  .tituloBarra {
+    padding: 15px;
+  }
+  .tituloBarra h2 {
+    font-size: 1.5em;
+  }
+  .tabNav {
+    flex-wrap: wrap;
+  }
+  .tabButton {
+    min-width: 110px;
+    font-size: 14px;
+    padding: 8px 15px;
+  }
+  .gridImagenes {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+  }
+  .imagenGaleria {
+    height: 150px;
+  }
+  .videoGrid {
+    grid-template-columns: 1fr;
+  }
+  .materialesGrid {
+    grid-template-columns: 1fr;
+  }
+  .eventoCard {
+    width: 99vw;
+    max-width: 99vw;
+    height: 220px;
+  }
+  .eventoImageContainer {
+    min-height: 220px;
+    height: 220px;
+  }
+  .eventoInfo {
+    opacity: 1;
+    background: linear-gradient(0deg, rgba(44,62,80,0.85) 80%, transparent 100%);
     pointer-events: auto;
   }
-  
+}
+
+@media (max-width: 1200px) {
+  .eventoCard {
+    height: 350px;
+  }
+  .eventoImageContainer {
+    min-height: 350px;
+    height: 350px;
+  }
+}
+
+@media (max-width: 900px) {
+  .galeriaContainer {
+    padding: 8px;
+    border-radius: 0;
+  }
+  .tituloBarra {
+    padding: 10px;
+    font-size: 1.1em;
+    border-radius: 0;
+  }
+  .seccionEventos,
+  .seccionFotos,
+  .seccionVideos {
+    max-width: 100vw;
+    margin: 10px 0;
+    padding: 10px 0 0 0;
+    border-radius: 0;
+  }
+  .gridImagenes {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .imagenGaleria {
+    height: 120px;
+  }
+  .videoGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .galeriaContainer {
+    padding: 2px;
+  }
+  .tituloBarra {
+    padding: 6px;
+    font-size: 1em;
+  }
+  .seccionEventos,
+  .seccionFotos,
+  .seccionVideos {
+    padding: 6px 0 0 0;
+  }
+  .gridImagenes {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .imagenGaleria {
+    height: 90px;
+  }
+  .singleCarouselContainer,
+  .singleEventoContainer {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
   .eventoCard {
     width: 100%;
-    max-width: 1500px;
-    min-width: 0;
-    height: 650px; /* Aumenta la altura del carrusel */
-    margin: 0 auto;
-    background: transparent; /* <-- Cambia esto */
-    border-radius: 24px; /* Más marco */
-    box-shadow: 0 4px 24px rgba(0,0,0,0.25); /* Sombra más notoria */
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    border: 8px solid #fff; /* Marco blanco grueso */
+    max-width: 100%;
+    height: 180px;
+    border-radius: 0;
   }
-  .eventoCardA {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-  }
-  
   .eventoImageContainer {
-    width: 100%;
-    height: 100%;
-    min-height: 650px; /* Igual que .eventoCard */
-    overflow: hidden;
-    background: transparent;     /* Fondo transparente para que no tape la imagen */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    min-height: 180px;
+    height: 180px;
     border-radius: 0;
-    box-shadow: none;
   }
-  .eventoImagen {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform 0.4s;
-    display: block;
-    aspect-ratio: unset;
-    max-width: unset;
-    max-height: unset;
-    border-radius: 0;
-    box-shadow: none;
-  }
-  .eventoCardA:hover .eventoImagen {
-    transform: scale(1.05);
-  }
-  
-  /* Oculta la info por defecto y la muestra solo en hover */
-  .eventoInfo {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: linear-gradient(0deg, rgba(44,62,80,0.85) 80%, transparent 100%);
-    color: #fff;
-    padding: 30px 16px 18px 16px;
-    text-align: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s;
-  }
-
-  .eventoCardA:hover .eventoInfo {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
   .eventoTitulo {
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 10px;
+    font-size: 1rem;
   }
-
   .eventoFecha {
-    font-size: 1.08rem;
-    color: #e0e0e0;
+    font-size: 0.9rem;
   }
-  
-  /* Indicadores debajo de la imagen */
   .carouselIndicators {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    gap: 8px;
-    width: 100%;
-    order: 2;
+    gap: 5px;
   }
-  
-  .indicator {
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: #d0d3d4;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
-    border: 2px solid transparent;
-  }
-  .activeIndicator {
-    background: #2980b9;
-    border-color: #2980b9;
-    transform: scale(1.15);
-  }
-  
-  /* Sección de Fotos */
-  .seccionFotos {
-    margin-bottom: 35px;
-  }
-  
-  .seccionFotos h3 {
-    color: #4a9d5c;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    font-weight: 600;
-    position: relative;
-    padding-bottom: 10px;
-  }
-  
-  .seccionFotos h3::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background-color: #4a9d5c;
-    border-radius: 2px;
-  }
-  
-  .gridImagenes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-  }
-  
-  .imagenWrapper {
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    position: relative;
-  }
-  
-  .imagenGaleria {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-    display: block;
-  }
-  
-  .imagenWrapper:hover .imagenGaleria {
-    transform: scale(1.08);
-  }
-  
-  .imagenOverlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 15px;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-    color: white;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .imagenWrapper:hover .imagenOverlay {
-    opacity: 1;
-  }
-  
-  /* Sección de Videos */
-  .seccionVideos {
-    margin-bottom: 35px;
-  }
-  
-  .seccionVideos h3 {
-    color: #4a9d5c;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    font-weight: 600;
-    position: relative;
-    padding-bottom: 10px;
-  }
-  
-  .seccionVideos h3::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background-color: #4a9d5c;
-    border-radius: 2px;
-  }
-  
-  .videoGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 25px;
-  }
-  
-  .videoItem {
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-  }
-  
-  .videoItem:hover {
-    transform: translateY(-5px);
-  }
-  
-  .videoItemHeader {
-    padding: 15px;
-    background-color: #4a9d5c;
-    color: white;
-  }
-  
-  .videoItemHeader h4 {
-    margin: 0;
-    font-size: 1.2em;
-  }
-  
-  .videoContainer {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%; /* Proporción 16:9 */
-    height: 0;
-    overflow: hidden;
-  }
-  
-  .videoContainer iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-  
-  .videoInfo {
-    padding: 15px;
-  }
-  
-  .videoInfo p {
-    margin: 0;
-    color: #666;
-    font-size: 0.95em;
-  }
-  
-  /* Animaciones */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Consultas de medios para respuesta */
-  @media (max-width: 1200px) {
-    .videoGrid {
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .galeriaContainer {
-      padding: 15px;
-    }
-  
-    .tituloBarra {
-      padding: 15px;
-    }
-  
-    .tituloBarra h2 {
-      font-size: 1.5em;
-    }
-  
-    .tabNav {
-      flex-wrap: wrap;
-    }
-  
-    .tabButton {
-      min-width: 110px;
-      font-size: 14px;
-      padding: 8px 15px;
-    }
-  
-    .gridImagenes {
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-    }
-  
-    .imagenGaleria {
-      height: 150px;
-    }
-  
-    .videoGrid {
-      grid-template-columns: 1fr;
-    }
-  
-    .materialesGrid {
-      grid-template-columns: 1fr;
-    }
-  
-    .eventoCard {
-      width: 99vw;
-      max-width: 99vw;
-      height: 220px;
-    }
-    .eventoImageContainer {
-      min-height: 220px;
-      height: 220px;
-    }
-    .eventoInfo {
-      opacity: 1;
-      background: linear-gradient(0deg, rgba(44,62,80,0.85) 80%, transparent 100%);
-      pointer-events: auto;
-    }
-  }
+}
 
-  /* --- RESPONSIVE AJUSTADO PARA EVENTOS Y GALERÍA --- */
+/* Scrollbars ocultas */
+::-webkit-scrollbar-button {
+  display: none !important;
+}
 
-  /* Carrusel y eventos */
-  @media (max-width: 1200px) {
-    .eventoCard {
-      height: 350px;
-    }
-    .eventoImageContainer {
-      min-height: 350px;
-      height: 350px;
-    }
-  }
-  
-  @media (max-width: 900px) {
-    .eventoCard {
-      width: 98vw;
-      max-width: 98vw;
-      height: 220px;
-    }
-    .eventoImageContainer {
-      min-height: 220px;
-      height: 220px;
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .singleCarouselContainer,
-    .singleEventoContainer {
-      width: 100%;
-      max-width: 100%;
-      padding: 0;
-    }
-    .eventoCard {
-      width: 100%;
-      max-width: 100%;
-      height: 180px;
-      border-radius: 0;
-    }
-    .eventoImageContainer {
-      min-height: 180px;
-      height: 180px;
-      border-radius: 0;
-    }
-    .eventoTitulo {
-      font-size: 1rem;
-    }
-    .eventoFecha {
-      font-size: 0.9rem;
-    }
-    .carouselIndicators {
-      gap: 5px;
-    }
-  }
-  
-  /* Galería de imágenes */
-  @media (max-width: 900px) {
-    .gridImagenes {
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 12px;
-    }
-    .imagenGaleria {
-      height: 120px;
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .gridImagenes {
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .imagenGaleria {
-      height: 90px;
-    }
-  }
-  
-  /* Videos */
-  @media (max-width: 1200px) {
-    .videoGrid {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 15px;
-    }
-  }
-  
-  @media (max-width: 900px) {
-    .videoGrid {
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .videoItem {
-      min-width: 0;
-    }
-  }
-  
-  /* Ajustes generales */
-  @media (max-width: 900px) {
-    .galeriaContainer {
-      padding: 8px;
-      border-radius: 0;
-    }
-    .tituloBarra {
-      padding: 10px;
-      font-size: 1.1em;
-      border-radius: 0;
-    }
-    .seccionEventos,
-    .seccionFotos,
-    .seccionVideos {
-      max-width: 100vw;
-      margin: 10px 0;
-      padding: 10px 0 0 0;
-      border-radius: 0;
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .galeriaContainer {
-      padding: 2px;
-    }
-    .tituloBarra {
-      padding: 6px;
-      font-size: 1em;
-    }
-    .seccionEventos,
-    .seccionFotos,
-    .seccionVideos {
-      padding: 6px 0 0 0;
-    }
-  }
-
-  ::-webkit-scrollbar-button {
-    display: none !important;
-  }
-
-  /* También puedes ocultar completamente la barra de scroll horizontal si no la necesitas: */
-  body, .galeriaContainer, .singleCarouselContainer {
-    overflow-x: hidden;
-  }
+body, .galeriaContainer, .singleCarouselContainer {
+  overflow-x: hidden;
+}
