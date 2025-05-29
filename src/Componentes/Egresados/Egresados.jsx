@@ -4,7 +4,8 @@ import HistoriaDestacada from "./HistoriaDestacada";
 import ContactForm from "./ContactForm";
 import Testimonios from "./Testimonios";
 import EncuestaLaboral from "./EncuestaLaboral";
-import Papa from "papaparse";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Egresados = () => {
   const [activeTab, setActiveTab] = useState("directorio");
@@ -13,182 +14,130 @@ const Egresados = () => {
   const [filterValues, setFilterValues] = useState({
     graduationYear: "",
     status: "",
-    city: "",
-    academicDegree: "",
   });
   const [uniqueValues, setUniqueValues] = useState({
     graduationYears: [],
     statuses: [],
-    cities: [],
-    academicDegrees: [],
   });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Función para cargar datos desde el CSV - MODIFICADA para usar Papa.parse directamente
+  const getYearFromDate = (dateString) => parseInt(dateString.split("-")[0]);
+
   useEffect(() => {
-    Papa.parse("/egresados_reales.csv", {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      dynamicTyping: true,
-      complete: (results) => {
-        if (results.data && results.data.length > 0) {
-          // Filtrar filas vacías
-          const datosLimpios = results.data.filter((row) =>
-            Object.values(row).some((v) => v)
-          );
+    const cargarDatos = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_URL}/api/egresados`);
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
 
-          // Inspeccionar qué campos de nombre están disponibles en los datos
-          console.log("Ejemplo de datos:", datosLimpios[0]);
+        const data = await response.json();
+        setEgresados(data);
+        setFilteredEgresados(data);
 
-          // Mapear los datos para asegurarnos de tener nombres
-          const egresadosConNombres = datosLimpios.map((egresado) => {
-            // Verificamos todos los posibles campos de nombre y usamos los primeros disponibles
-            const posibleNombre =
-              egresado.nombre ||
-              egresado.name ||
-              egresado.firstName ||
-              "Nombre";
-            const posibleApellido =
-              egresado.apellido || egresado.lastName || "";
+        const years = [
+          ...new Set(data.map((e) => getYearFromDate(e.año_graduacion))),
+        ].sort((a, b) => b - a);
+        const statuses = [
+          ...new Set(data.map((e) => e.empleabilidad).filter(Boolean)),
+        ];
 
-            return {
-              ...egresado,
-              nombre: posibleNombre,
-              apellido: posibleApellido,
-              // Mantenemos también los campos firstName y lastName por compatibilidad
-              firstName: posibleNombre,
-              lastName: posibleApellido,
-            };
-          });
-
-          setEgresados(egresadosConNombres);
-          setFilteredEgresados(egresadosConNombres);
-
-          // Extraer valores únicos para los filtros
-          const years = [
-            ...new Set(egresadosConNombres.map((e) => e.graduationYear)),
-          ].sort((a, b) => b - a);
-          const statuses = [
-            ...new Set(egresadosConNombres.map((e) => e.status)),
-          ];
-          const cities = [...new Set(egresadosConNombres.map((e) => e.city))];
-          const degrees = [
-            ...new Set(egresadosConNombres.map((e) => e.academicDegree)),
-          ];
-
-          setUniqueValues({
-            graduationYears: years,
-            statuses: statuses,
-            cities: cities,
-            academicDegrees: degrees,
-          });
-        }
-      },
-      error: (error) => {
-        console.error("Error al cargar los datos:", error);
+        setUniqueValues({ graduationYears: years, statuses });
+        setError(null);
+      } catch (error) {
+        console.error("Error cargando egresados:", error);
+        setError("Error al cargar los datos de egresados");
         setEgresados([]);
-      },
-    });
-  }, []);
-
-  // Función para filtrar egresados
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-
-    const newFilterValues = {
-      ...filterValues,
-      [name]: value,
+        setFilteredEgresados([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
+    cargarDatos();
+  }, []);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    const newFilterValues = { ...filterValues, [name]: value };
     setFilterValues(newFilterValues);
 
-    // Aplicar filtros
     let filtered = [...egresados];
-
     if (newFilterValues.graduationYear) {
       filtered = filtered.filter(
-        (e) => e.graduationYear == newFilterValues.graduationYear
+        (e) =>
+          getYearFromDate(e.año_graduacion) == newFilterValues.graduationYear
       );
     }
-
     if (newFilterValues.status) {
-      filtered = filtered.filter((e) => e.status === newFilterValues.status);
-    }
-
-    if (newFilterValues.city) {
-      filtered = filtered.filter((e) => e.city === newFilterValues.city);
-    }
-
-    if (newFilterValues.academicDegree) {
       filtered = filtered.filter(
-        (e) =>
-          e.academicDegree &&
-          e.academicDegree.includes(newFilterValues.academicDegree)
+        (e) => e.empleabilidad === newFilterValues.status
       );
     }
 
     setFilteredEgresados(filtered);
   };
 
-  // Función para resetear los filtros
   const resetFilters = () => {
-    setFilterValues({
-      graduationYear: "",
-      status: "",
-      city: "",
-      academicDegree: "",
-    });
+    setFilterValues({ graduationYear: "", status: "" });
     setFilteredEgresados(egresados);
   };
 
-  // Función para determinar el estado del egresado en español
-  const getStatusText = (status) => {
-    switch (status) {
-      case "employed":
-        return "Empleado";
-      case "studying":
-        return "Estudiando";
-      case "searching":
-        return "Buscando empleo";
-      default:
-        return status;
+  const exportToCSV = () => {
+    if (filteredEgresados.length === 0) {
+      alert("No hay datos para exportar");
+      return;
     }
+
+    const headers = [
+      "ID",
+      "Nombre Completo",
+      "Año de Graduación",
+      "Empleabilidad",
+      "Email",
+    ];
+    const csvContent = [
+      headers.join(","),
+      ...filteredEgresados.map((egresado) =>
+        [
+          egresado.egresado_id,
+          `"${egresado.nombre_completo}"`,
+          getYearFromDate(egresado.año_graduacion),
+          `"${egresado.empleabilidad}"`,
+          `"${egresado.email}"`,
+        ].join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `egresados_${new Date().toISOString().split("T")[0]}.csv`
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
-  // Función para determinar la clase CSS del estado
+  const getStatusText = (status) => status || "No especificado";
+
   const getStatusClass = (status) => {
-    switch (status) {
-      case "employed":
+    switch (status?.toLowerCase()) {
+      case "empleado":
         return "status-employed";
-      case "studying":
-        return "status-studying";
-      case "searching":
-        return "status-searching";
+      case "emprendedor":
+        return "status-entrepreneur";
+      case "desempleado":
+        return "status-unemployed";
       default:
         return "status-default";
     }
   };
 
-  // Obtener nombre completo
-  const getNombreCompleto = (egresado) => {
-    // Verificar todas las posibles combinaciones de campos para el nombre
-    const nombre = egresado.nombre || egresado.name || egresado.firstName || "";
-    const apellido = egresado.apellido || egresado.lastName || "";
-
-    // Si hay un nombre completo ya formateado, usarlo
-    if (egresado.nombreCompleto) return egresado.nombreCompleto;
-
-    // Verificar si hay un campo que podría contener el nombre completo
-    if (egresado.nombre && egresado.nombre.includes(" ")) {
-      return egresado.nombre;
-    }
-
-    // Formar el nombre completo con los valores disponibles
-    const nombreCompleto = `${nombre} ${apellido}`.trim();
-    return nombreCompleto || "Nombre no disponible";
-  };
-
-  // Componente para el icono de persona
   const PersonIcon = () => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -207,7 +156,6 @@ const Egresados = () => {
     </svg>
   );
 
-  // Datos para Historias Destacadas (normalmente vendrían de una API)
   const historiasDestacadas = [
     {
       id: 1,
@@ -235,22 +183,8 @@ const Egresados = () => {
         "Ponente en eventos internacionales sobre Cloud Computing",
       ],
     },
-    {
-      id: 3,
-      nombre: "Marina Isabel Méndez Castaño",
-      titulo: "Coordinadora de Programa - Universidad Popular del Cesar",
-      imagen: "/api/placeholder/300/300",
-      descripcion:
-        "Ingeniera de Sistemas con Doctorado en Educación y amplia experiencia académica y administrativa.",
-      logros: [
-        "Doctorado en Educación",
-        "Publicación de investigaciones sobre metodologías de enseñanza en ingeniería",
-        "Liderazgo en procesos de acreditación de alta calidad",
-      ],
-    },
   ];
 
-  // Testimonios de egresados
   const testimoniosEgresados = [
     {
       id: 1,
@@ -268,19 +202,11 @@ const Egresados = () => {
       testimonio:
         "La formación integral que recibí en la Universidad Popular del Cesar me permitió asumir roles de liderazgo en proyectos de transformación digital en el sector público.",
     },
-    {
-      id: 3,
-      nombre: "Miguel Ángel Suárez Villar",
-      graduacion: 2016,
-      imagen: "/api/placeholder/100/100",
-      testimonio:
-        "Las bases sólidas en ciencias de la computación que obtuve en la UPC fueron fundamentales para mi desarrollo profesional en Google Cloud, donde actualmente me desempeño como Cloud Engineer.",
-    },
   ];
 
   return (
     <div className="egresados-container">
-      <div className="egresados-header">
+      <div class="egresados-header-banner">
         <h1>Red de Egresados</h1>
         <p>
           Programa de Ingeniería de Sistemas - Universidad Popular del Cesar
@@ -289,46 +215,23 @@ const Egresados = () => {
 
       <div className="egresados-content-wrapper">
         <div className="tab-nav-horizontal">
-          <button
-            className={
-              activeTab === "directorio" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("directorio")}
-          >
-            Directorio de Egresados
-          </button>
-          <button
-            className={
-              activeTab === "historias" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("historias")}
-          >
-            Historias Destacadas
-          </button>
-          <button
-            className={
-              activeTab === "testimonios" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("testimonios")}
-          >
-            Testimonios
-          </button>
-          <button
-            className={
-              activeTab === "contacto" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("contacto")}
-          >
-            Contacto
-          </button>
-          <button
-            className={
-              activeTab === "encuesta" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("encuesta")}
-          >
-            Encuesta Laboral
-          </button>
+          {[
+            { key: "directorio", label: "Directorio de Egresados" },
+            { key: "historias", label: "Historias Destacadas" },
+            { key: "testimonios", label: "Testimonios" },
+            { key: "contacto", label: "Contacto" },
+            { key: "encuesta", label: "Encuesta Laboral" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              className={
+                activeTab === tab.key ? "tab-button active" : "tab-button"
+              }
+              onClick={() => setActiveTab(tab.key)}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         <div className="tab-content-container">
@@ -339,7 +242,6 @@ const Egresados = () => {
                 Conoce las historias de éxito de nuestros graduados que están
                 marcando la diferencia en el campo de la tecnología.
               </p>
-
               <div className="historias-grid">
                 {historiasDestacadas.map((historia) => (
                   <HistoriaDestacada key={historia.id} historia={historia} />
@@ -350,118 +252,82 @@ const Egresados = () => {
 
           {activeTab === "directorio" && (
             <div className="tab-content">
-              <h2>Directorio de Egresados</h2>
-              <p className="section-description">
-                Explora nuestra base de datos de egresados y mantente conectado
-                con la comunidad de Ingeniería de Sistemas.
-              </p>
+              <div className="directory-container">
+                <h2 className="filter-title">Filtrar Egresados</h2>
 
-              <div className="filter-section">
-                <h3>Filtrar Egresados</h3>
-                <div className="filters-container">
-                  <div className="filter-group">
-                    <label htmlFor="graduationYear">Año de Graduación</label>
-                    <select
-                      name="graduationYear"
-                      id="graduationYear"
-                      value={filterValues.graduationYear}
-                      onChange={handleFilterChange}
-                    >
-                      <option value="">Todos</option>
-                      {uniqueValues.graduationYears.map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
+                <div className="filter-section-centered">
+                  <div className="filters-container">
+                    <div className="filter-group">
+                      <label htmlFor="graduationYear">Año de Graduación</label>
+                      <select
+                        name="graduationYear"
+                        id="graduationYear"
+                        value={filterValues.graduationYear}
+                        onChange={handleFilterChange}
+                      >
+                        <option value="">Todos</option>
+                        {uniqueValues.graduationYears.map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="filter-group">
+                      <label htmlFor="status">Estado de Empleabilidad</label>
+                      <select
+                        name="status"
+                        id="status"
+                        value={filterValues.status}
+                        onChange={handleFilterChange}
+                      >
+                        <option value="">Todos</option>
+                        {uniqueValues.statuses.map((status) => (
+                          <option key={status} value={status}>
+                            {status}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="buttons-group">
+                      <button className="reset-button" onClick={resetFilters}>
+                        Resetear Filtros
+                      </button>
+                      <button className="export-button" onClick={exportToCSV}>
+                        Exportar CSV
+                      </button>
+                    </div>
                   </div>
-
-                  <div className="filter-group">
-                    <label htmlFor="status">Estado</label>
-                    <select
-                      name="status"
-                      id="status"
-                      value={filterValues.status}
-                      onChange={handleFilterChange}
-                    >
-                      <option value="">Todos</option>
-                      {uniqueValues.statuses.map((status) => (
-                        <option key={status} value={status}>
-                          {status === "employed"
-                            ? "Empleado"
-                            : status === "studying"
-                            ? "Estudiando"
-                            : status === "searching"
-                            ? "Buscando empleo"
-                            : status}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="filter-group">
-                    <label htmlFor="city">Ciudad</label>
-                    <select
-                      name="city"
-                      id="city"
-                      value={filterValues.city}
-                      onChange={handleFilterChange}
-                    >
-                      <option value="">Todas</option>
-                      {uniqueValues.cities.map((city) => (
-                        <option key={city} value={city}>
-                          {city}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="filter-group">
-                    <label htmlFor="academicDegree">Formación Académica</label>
-                    <select
-                      name="academicDegree"
-                      id="academicDegree"
-                      value={filterValues.academicDegree}
-                      onChange={handleFilterChange}
-                    >
-                      <option value="">Todas</option>
-                      <option value="Especialista">Especialización</option>
-                      <option value="Magíster">Maestría</option>
-                      <option value="Doctorado">Doctorado</option>
-                    </select>
-                  </div>
-
-                  <button className="reset-button" onClick={resetFilters}>
-                    Resetear Filtros
-                  </button>
                 </div>
-              </div>
 
-              {/* TABLA DE EGRESADOS MEJORADA */}
-              <div className="egresados-table-container">
-                {filteredEgresados.length > 0 ? (
-                  <table className="egresados-table">
-                    <thead>
-                      <tr>
-                        <th>Perfil</th>
-                        <th>Nombre</th>
-                        <th>Graduación</th>
-                        <th>Estado</th>
-                        <th>Empresa</th>
-                        <th>Cargo</th>
-                        <th>Ubicación</th>
-                        <th>Formación adicional</th>
-                        <th>Contacto</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredEgresados.map((egresado, index) => {
-                        // Verificar y mostrar datos para depuración
-                        if (index === 0) {
-                          console.log("Datos de primer egresado:", egresado);
-                        }
-                        return (
-                          <tr key={index} className="egresado-row">
+                <div className="egresados-table-container">
+                  {loading ? (
+                    <div className="loading-message">
+                      <p>Cargando datos de egresados...</p>
+                    </div>
+                  ) : error ? (
+                    <div className="error-message">
+                      <p>{error}</p>
+                    </div>
+                  ) : filteredEgresados.length > 0 ? (
+                    <table className="egresados-table">
+                      <thead>
+                        <tr>
+                          <th>Perfil</th>
+                          <th>Nombre Completo</th>
+                          <th>Año de Graduación</th>
+                          <th>Estado de Empleabilidad</th>
+                          <th>Email</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredEgresados.map((egresado) => (
+                          <tr
+                            key={egresado.egresado_id}
+                            className="egresado-row"
+                          >
                             <td className="photo-cell">
                               <div className="photo-wrapper">
                                 <PersonIcon />
@@ -469,34 +335,20 @@ const Egresados = () => {
                             </td>
                             <td className="name-cell">
                               <div className="egresado-name">
-                                {getNombreCompleto(egresado)}
+                                {egresado.nombre_completo}
                               </div>
                             </td>
                             <td className="year-cell">
-                              {egresado.graduationYear}
+                              {getYearFromDate(egresado.año_graduacion)}
                             </td>
                             <td className="status-cell">
                               <span
                                 className={`status-badge ${getStatusClass(
-                                  egresado.status
+                                  egresado.empleabilidad
                                 )}`}
                               >
-                                {getStatusText(egresado.status)}
+                                {getStatusText(egresado.empleabilidad)}
                               </span>
-                            </td>
-                            <td className="company-cell">
-                              {egresado.company || "-"}
-                            </td>
-                            <td className="position-cell">
-                              {egresado.position || "-"}
-                            </td>
-                            <td className="location-cell">
-                              {egresado.city || ""}
-                              {egresado.city && egresado.country ? ", " : ""}
-                              {egresado.country || ""}
-                            </td>
-                            <td className="degree-cell">
-                              {egresado.academicDegree || "-"}
                             </td>
                             <td className="contact-cell">
                               {egresado.email && (
@@ -509,28 +361,25 @@ const Egresados = () => {
                                   <span className="contact-text">Email</span>
                                 </a>
                               )}
-                              {egresado.linkedin && (
-                                <a
-                                  href={egresado.linkedin}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="contact-button-table linkedin"
-                                  title="Ver perfil de LinkedIn"
-                                >
-                                  <span className="contact-icon">in</span>
-                                  <span className="contact-text">LinkedIn</span>
-                                </a>
-                              )}
                             </td>
                           </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                ) : (
-                  <p className="no-results">
-                    No se encontraron egresados con los filtros seleccionados.
-                  </p>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <p className="no-results">
+                      No se encontraron egresados con los filtros seleccionados.
+                    </p>
+                  )}
+                </div>
+
+                {!loading && !error && (
+                  <div className="results-summary">
+                    <p>
+                      Mostrando {filteredEgresados.length} de {egresados.length}{" "}
+                      egresados
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
@@ -543,7 +392,6 @@ const Egresados = () => {
                 Conoce lo que nuestros egresados tienen que decir sobre su
                 experiencia en el programa de Ingeniería de Sistemas.
               </p>
-
               <Testimonios testimonios={testimoniosEgresados} />
             </div>
           )}
@@ -555,7 +403,6 @@ const Egresados = () => {
                 Si tienes alguna pregunta o sugerencia para la red de egresados,
                 no dudes en contactarnos.
               </p>
-
               <ContactForm />
             </div>
           )}
@@ -567,7 +414,6 @@ const Egresados = () => {
                 Tu experiencia laboral es importante para nosotros. Completa
                 esta encuesta para ayudarnos a mejorar nuestros programas.
               </p>
-
               <EncuestaLaboral />
             </div>
           )}

@@ -1,486 +1,750 @@
-// Dashboard.jsx - Actualizado con funcionalidad de importación
-import { useState, useEffect } from "react";
-import Papa from "papaparse";
-import StatsCard from "./StatsCard";
-import BarChart from "./BarChart";
-import PieChart from "./PieChart";
-import LineChart from "./LineChart";
-import DataTable from "./DataTable";
-import ImportData from "./importData";
-import { downloadCSV, downloadExcel, downloadPDF } from "./exportUtils";
-import "./Dashboard.css";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+} from "recharts";
 
-const Dashboard = ({ isDarkMode }) => {
-  const [activeTab, setActiveTab] = useState("general");
-  const [statsData, setStatsData] = useState({
-    current_students: 0,
-    total_graduates: 0,
-    employment_rate: 0,
-    graduation_rate: 0,
-    total_agreements: 0,
-    specialized_laboratories: 0,
-    total_professors: 0,
-    phd_professors: 0,
-    masters_professors: 0,
-    specialization_professors: 0,
-    national_presentations: 0,
-    international_presentations: 0,
-    scientific_articles: 0,
-    technical_productions: 0,
-    book_chapters: 0,
-  });
+// Importar las funciones de exportación
+import {
+  downloadCSV,
+  downloadExcel,
+  downloadPDF,
+  importFromCSV,
+} from "./exportUtils";
+
+// Importa el CSS del dashboard
+import "./dashboard.css"; // Asegúrate de que la ruta sea correcta
+
+const API_URL =
+  import.meta.env.VITE_API_URL || "https://sistemas-back.onrender.com";
+
+const Dashboard = () => {
+  const [estadisticas, setEstadisticas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showImport, setShowImport] = useState(false);
+  const [activeTab, setActiveTab] = useState("general");
+  const [isExporting, setIsExporting] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
-    // Cargar datos del CSV
-    Papa.parse("/estadisticas_upc.csv", {
-      download: true,
-      header: true,
-      complete: (results) => {
-        const data = {};
-
-        // Convertir los datos del CSV a un objeto plano
-        results.data.forEach((row) => {
-          if (row.category && row.value) {
-            // Convertir valores numéricos a números
-            const numValue = !isNaN(parseFloat(row.value))
-              ? parseFloat(row.value)
-              : row.value;
-            data[row.category] = numValue;
-          }
-        });
-
-        setStatsData(data);
+    const cargarEstadisticas = async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/estadisticas`);
+        const data = await response.json();
+        setEstadisticas(data);
         setLoading(false);
-      },
-      error: (error) => {
-        console.error("Error al cargar el archivo CSV:", error);
+      } catch (error) {
+        console.error("Error cargando estadísticas:", error);
         setLoading(false);
-      },
-    });
+      }
+    };
+    cargarEstadisticas();
   }, []);
 
-  // Función para procesar los datos importados
-  const handleDataImported = (importedData) => {
-    // Fusionar datos importados con los existentes
-    const updatedData = { ...statsData, ...importedData };
-    setStatsData(updatedData);
-
-    // Ocultar el panel de importación después de una importación exitosa
-    setShowImport(false);
+  // Función helper para obtener valor por categoría
+  const getValueByCategory = (categoria) => {
+    const item = estadisticas.find((stat) => stat.categoria === categoria);
+    return item ? parseInt(item.value) : 0;
   };
 
-  // Datos para gráficos basados en los datos cargados
-  const professorData = [
-    { name: "Docentes con Doctorado", value: statsData.phd_professors || 0 },
-    { name: "Docentes con Maestría", value: statsData.masters_professors || 0 },
-    {
-      name: "Docentes con Especialización",
-      value: statsData.specialization_professors || 0,
-    },
-  ];
-
-  const productionData = [
-    {
-      name: "Ponencias Nacionales",
-      value: statsData.national_presentations || 0,
-    },
-    {
-      name: "Ponencias Internacionales",
-      value: statsData.international_presentations || 0,
-    },
-    {
-      name: "Artículos Científicos",
-      value: statsData.scientific_articles || 0,
-    },
-    { name: "Producción Técnica", value: statsData.technical_productions || 0 },
-    { name: "Capítulos de Libros", value: statsData.book_chapters || 0 },
-  ];
-
-  // Datos estáticos para algunos gráficos (podrían ser dinámicos con más datos en el CSV)
-  const graduatesPerYearData = [
-    { year: "2017", value: 60 },
-    { year: "2018", value: 65 },
-    { year: "2019", value: 67 },
-    { year: "2020", value: 63 },
-    { year: "2021", value: 70 },
-  ];
-
-  const employmentData = [
-    { name: "Empleados", value: statsData.employment_rate || 0 },
-    { name: "Desempleados", value: 100 - (statsData.employment_rate || 0) },
-  ];
-
-  const handleExportData = (format) => {
-    const data = {
-      statsData: statsData,
-      professorData,
-      productionData,
-      graduatesPerYearData,
-    };
-
-    switch (format) {
-      case "csv":
-        downloadCSV(data, "estadisticas-ingenieria-sistemas");
-        break;
-      case "excel":
-        downloadExcel(data, "estadisticas-ingenieria-sistemas");
-        break;
-      case "pdf":
-        downloadPDF(data, "estadisticas-ingenieria-sistemas");
-        break;
-      default:
-        break;
+  // Funciones de exportación
+  const handleExportCSV = async () => {
+    setIsExporting(true);
+    try {
+      const timestamp = new Date().toISOString().slice(0, 10);
+      await downloadCSV(estadisticas, `dashboard_estadisticas_${timestamp}`);
+      console.log("CSV exportado correctamente");
+    } catch (error) {
+      console.error("Error al exportar CSV:", error);
+      alert("Error al exportar CSV: " + error.message);
+    } finally {
+      setIsExporting(false);
     }
   };
 
-  const toggleImportPanel = () => {
-    setShowImport(!showImport);
+  const handleExportExcel = async () => {
+    setIsExporting(true);
+    try {
+      const timestamp = new Date().toISOString().slice(0, 10);
+      await downloadExcel(estadisticas, `dashboard_estadisticas_${timestamp}`);
+      console.log("Excel exportado correctamente");
+    } catch (error) {
+      console.error("Error al exportar Excel:", error);
+      alert("Error al exportar Excel: " + error.message);
+    } finally {
+      setIsExporting(false);
+    }
   };
+
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    try {
+      const timestamp = new Date().toISOString().slice(0, 10);
+      await downloadPDF(estadisticas, `dashboard_estadisticas_${timestamp}`);
+      console.log("PDF exportado correctamente");
+    } catch (error) {
+      console.error("Error al exportar PDF:", error);
+      alert("Error al exportar PDF: " + error.message);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  // Función para importar datos
+  const handleImportData = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type === "text/csv") {
+      setIsExporting(true);
+      importFromCSV(file, (importedData) => {
+        if (importedData.length > 0) {
+          // Actualizar estadísticas con los datos importados
+          const updatedStats = [...estadisticas];
+          importedData.forEach((imported) => {
+            const existingIndex = updatedStats.findIndex(
+              (stat) => stat.categoria === imported.categoria
+            );
+            if (existingIndex >= 0) {
+              updatedStats[existingIndex].value = imported.value;
+            } else {
+              updatedStats.push(imported);
+            }
+          });
+          setEstadisticas(updatedStats);
+          alert(`Se importaron ${importedData.length} registros correctamente`);
+        } else {
+          alert("No se encontraron datos válidos en el archivo CSV");
+        }
+        setIsExporting(false);
+      });
+    } else {
+      alert("Por favor selecciona un archivo CSV válido");
+    }
+    // Limpiar el input
+    event.target.value = "";
+  };
+
+  // Datos para gráficos
+  const proyectosData = [
+    { name: "Proyectos", value: getValueByCategory("Proyectos") },
+    { name: "Eventos", value: getValueByCategory("Eventos") },
+    { name: "Talleres", value: getValueByCategory("Talleres") },
+    { name: "Charlas", value: getValueByCategory("Charlas") },
+  ];
+
+  const participacionData = [
+    { name: "Participantes", value: getValueByCategory("Participantes") },
+    { name: "Beneficiarios", value: getValueByCategory("Beneficiarios") },
+    { name: "Capacitados", value: getValueByCategory("Capacitados") },
+    { name: "Jóvenes", value: getValueByCategory("Jovenes") },
+  ];
+
+  const alianzasData = [
+    { name: "Alianzas", value: getValueByCategory("Alianzas") },
+    { name: "Clientes", value: getValueByCategory("Clientes") },
+    { name: "Patrocinadores", value: getValueByCategory("Patrocinadores") },
+    { name: "Países", value: getValueByCategory("Países") },
+  ];
+
+  const demograficosData = [
+    { name: "Mujeres", value: getValueByCategory("Mujeres"), color: "#FDD835" },
+    {
+      name: "Hombres",
+      value: 100 - getValueByCategory("Mujeres"),
+      color: "#388E3C",
+    },
+  ];
+
+  const modalidadData = [
+    {
+      name: "Presencial",
+      value: getValueByCategory("Presencial"),
+      color: "#388E3C",
+    },
+    { name: "Virtual", value: getValueByCategory("Virtual"), color: "#FDD835" },
+    { name: "Mixto", value: getValueByCategory("Mixto"), color: "#52C55A" },
+  ];
+
+  const COLORS = [
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#8884d8",
+    "#82ca9d",
+  ];
+
+  // Componente de tarjeta estadística
+  const DashboardStatsCard = ({
+    title,
+    value,
+    icon,
+    color = "#4CAF50",
+    colorClass = "",
+  }) => (
+    <div
+      className={`dashboard-stats-card ${
+        colorClass ? `dashboard-card-${colorClass}` : ""
+      }`}
+    >
+      <div className="dashboard-stats-card-content">
+        <div className="dashboard-stats-card-info">
+          <h4>{title}</h4>
+          <div className="dashboard-stats-card-value">{value}</div>
+        </div>
+        <div className="dashboard-stats-card-icon" style={{ color }}>
+          {icon}
+        </div>
+      </div>
+    </div>
+  );
 
   const renderTabContent = () => {
     if (loading) {
-      return <div className="loading-indicator">Cargando datos...</div>;
+      return (
+        <div className="dashboard-loading-state">
+          <div className="dashboard-loading-spinner"></div>
+          <div>Cargando datos...</div>
+        </div>
+      );
     }
 
     switch (activeTab) {
       case "general":
         return (
-          <div className="tab-content">
-            <div className="stats-cards">
-              <StatsCard
-                title="Estudiantes Actuales"
-                value={statsData.current_students}
-                icon="users"
+          <div className="dashboard-fade-in">
+            {/* Tarjetas principales */}
+            <div className="dashboard-stats-grid">
+              <DashboardStatsCard
+                title="Proyectos"
+                value={getValueByCategory("Proyectos")}
+                icon="📊"
+                color="#4CAF50"
               />
-              <StatsCard
-                title="Total Egresados"
-                value={statsData.total_graduates}
-                icon="graduation-cap"
+              <DashboardStatsCard
+                title="Beneficiarios"
+                value={getValueByCategory("Beneficiarios").toLocaleString()}
+                icon="👥"
+                color="#2196F3"
+                colorClass="blue"
               />
-              <StatsCard
-                title="Tasa de Empleabilidad"
-                value={`${statsData.employment_rate}%`}
-                icon="briefcase"
+              <DashboardStatsCard
+                title="Satisfacción"
+                value={`${getValueByCategory("Satisfacción")}%`}
+                icon="⭐"
+                color="#FF9800"
+                colorClass="orange"
               />
-              <StatsCard
-                title="Tasa de Graduación"
-                value={`${statsData.graduation_rate}%`}
-                icon="chart-line"
+              <DashboardStatsCard
+                title="Metas Cumplidas"
+                value={`${getValueByCategory("Metas")}%`}
+                icon="🎯"
+                color="#9C27B0"
+                colorClass="purple"
               />
             </div>
 
-            <div className="charts-row">
-              <div className="chart-container">
-                <h3>Estadísticas de Empleabilidad</h3>
-                <PieChart data={employmentData} />
+            {/* Gráficos principales */}
+            <div className="dashboard-charts-grid">
+              <div className="dashboard-chart-container">
+                <h3 className="dashboard-chart-title">
+                  Actividades del Programa
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={proyectosData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="value" fill="#4CAF50" />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
-              <div className="chart-container">
-                <h3>Evolución de Egresados</h3>
-                <LineChart data={graduatesPerYearData} />
-              </div>
-            </div>
 
-            <div className="data-section">
-              <h3>Convenios y Alianzas Académicas</h3>
-              <p>Total de convenios y alianzas: {statsData.total_agreements}</p>
-              <DataTable
-                headers={[
-                  "Tipo de Convenio",
-                  "Institución",
-                  "Fecha de Inicio",
-                  "Estado",
-                ]}
-                data={[
-                  ["Académico", "Oracle Academy", "2020-01-15", "Activo"],
-                  ["Investigación", "Colciencias", "2021-05-10", "Activo"],
-                  [
-                    "Networking",
-                    "Cisco Networking Academy",
-                    "2019-08-22",
-                    "Activo",
-                  ],
-                  [
-                    "Internacional",
-                    "Universidad Politécnica de Madrid",
-                    "2022-01-15",
-                    "Activo",
-                  ],
-                  ["Académico", "Microsoft", "2020-11-30", "Activo"],
-                ]}
-              />
-            </div>
-          </div>
-        );
-
-      case "graduates":
-        return (
-          <div className="tab-content">
-            <div className="stats-cards">
-              <StatsCard
-                title="Total Egresados"
-                value={statsData.total_graduates}
-                icon="graduation-cap"
-              />
-              <StatsCard
-                title="Tasa de Empleabilidad"
-                value={`${statsData.employment_rate}%`}
-                icon="briefcase"
-              />
-              <StatsCard
-                title="Promedio Anual de Egresados"
-                value="63"
-                icon="users"
-              />
-              <StatsCard
-                title="Relación Estudiante/Egresado"
-                value={(
-                  statsData.current_students / statsData.total_graduates
-                ).toFixed(2)}
-                icon="balance-scale"
-              />
-            </div>
-
-            <div className="charts-row">
-              <div className="chart-container">
-                <h3>Empleabilidad de Egresados</h3>
-                <PieChart data={employmentData} />
-              </div>
-              <div className="chart-container">
-                <h3>Egresados por Año</h3>
-                <BarChart
-                  data={graduatesPerYearData}
-                  dataKey="value"
-                  nameKey="year"
-                />
+              <div className="dashboard-chart-container">
+                <h3 className="dashboard-chart-title">
+                  Distribución por Modalidad
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={modalidadData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={80}
+                      fill="#388E3C"
+                      dataKey="value"
+                      label={({ name, percent }) =>
+                        `${name} ${(percent * 100).toFixed(0)}%`
+                      }
+                    >
+                      {modalidadData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
             </div>
 
-            <div className="data-section">
-              <h3>Estadísticas de Inserción Laboral</h3>
-              <DataTable
-                headers={["Sector", "Porcentaje", "Salario Promedio"]}
-                data={[
-                  ["Tecnología", "45%", "3.2 SMMLV"],
-                  ["Educación", "25%", "2.8 SMMLV"],
-                  ["Servicios", "15%", "2.6 SMMLV"],
-                  ["Gobierno", "10%", "3.0 SMMLV"],
-                  ["Otros", "5%", "2.5 SMMLV"],
-                ]}
-              />
-            </div>
-          </div>
-        );
-
-      case "professors":
-        return (
-          <div className="tab-content">
-            <div className="stats-cards">
-              <StatsCard
-                title="Total Docentes"
-                value={statsData.total_professors}
-                icon="chalkboard-teacher"
-              />
-              <StatsCard
-                title="Docentes con Doctorado"
-                value={statsData.phd_professors}
-                icon="user-graduate"
-              />
-              <StatsCard
-                title="Docentes con Maestría"
-                value={statsData.masters_professors}
-                icon="user-tie"
-              />
-              <StatsCard
-                title="Docentes con Especialización"
-                value={statsData.specialization_professors}
-                icon="user"
-              />
-            </div>
-
-            <div className="charts-row">
-              <div className="chart-container">
-                <h3>Nivel Académico de Docentes</h3>
-                <PieChart data={professorData} />
-              </div>
-              <div className="chart-container">
-                <h3>Distribución por Tipo de Vinculación</h3>
-                <BarChart
-                  data={[
-                    {
-                      name: "Planta",
-                      value: statsData.permanent_professors || 0,
-                    },
-                    {
-                      name: "Tiempo Completo",
-                      value: statsData.full_time_professors || 0,
-                    },
-                    {
-                      name: "Catedráticos",
-                      value: statsData.part_time_professors || 0,
-                    },
-                    {
-                      name: "Ad Honorem",
-                      value: statsData.ad_honorem_professors || 0,
-                    },
-                  ]}
-                  dataKey="value"
-                  nameKey="name"
-                />
-              </div>
-            </div>
-          </div>
-        );
-
-      case "production":
-        return (
-          <div className="tab-content">
-            <div className="stats-cards">
-              <StatsCard
-                title="Ponencias Nacionales"
-                value={statsData.national_presentations}
-                icon="map-marker-alt"
-              />
-              <StatsCard
-                title="Ponencias Internacionales"
-                value={statsData.international_presentations}
-                icon="globe"
-              />
-              <StatsCard
-                title="Artículos Científicos"
-                value={statsData.scientific_articles}
-                icon="file-alt"
-              />
-              <StatsCard
-                title="Producción Técnica"
-                value={statsData.technical_productions}
-                icon="cogs"
-              />
-            </div>
-
-            <div className="charts-row">
-              <div className="chart-container">
-                <h3>Producción Académica</h3>
-                <BarChart
-                  data={productionData}
-                  dataKey="value"
-                  nameKey="name"
-                />
-              </div>
-              <div className="chart-container">
-                <h3>Distribución Porcentual</h3>
-                <PieChart data={productionData} />
-              </div>
-            </div>
-
-            <div className="data-section">
-              <h3>Capítulos de Libros Publicados</h3>
-              <p>Total: {statsData.book_chapters}</p>
-              <DataTable
-                headers={["Título", "Autores", "Año", "Editorial"]}
-                data={[
-                  [
-                    "Inteligencia Artificial en la Educación",
-                    "Pérez, J., Gómez, L.",
-                    "2023",
-                    "Editorial Académica",
-                  ],
-                  [
-                    "Desarrollo Web Moderno",
-                    "Martínez, A., Rodríguez, C.",
-                    "2022",
-                    "Springer",
-                  ],
-                  [
-                    "Machine Learning Aplicado",
-                    "López, S., Torres, M.",
-                    "2021",
-                    "IEEE Press",
-                  ],
-                ]}
-              />
-            </div>
-          </div>
-        );
-
-      case "import":
-        return (
-          <div className="tab-content">
-            <ImportData onDataImported={handleDataImported} />
-
-            <div className="import-help-section">
-              <h3>Ayuda para Importación</h3>
-              <div className="import-instructions">
-                <h4>Formato de Archivos</h4>
-                <p>
-                  Para importar datos correctamente, asegúrate de que tus
-                  archivos cumplan con el siguiente formato:
-                </p>
-
-                <div className="format-example">
-                  <h5>CSV</h5>
-                  <pre>
-                    category,value current_students,850 total_graduates,1245
-                    employment_rate,87 ...
-                  </pre>
+            {/* Indicadores adicionales */}
+            <div className="dashboard-indicators-grid">
+              <div className="dashboard-indicator-card">
+                <h4 className="dashboard-indicator-title">Alcance Digital</h4>
+                <div className="dashboard-indicator-value">
+                  {getValueByCategory("RedesSociales").toLocaleString()}
                 </div>
-
-                <div className="format-example">
-                  <h5>Excel</h5>
-                  <p>
-                    Columnas A y B con encabezados "category" y "value", o
-                    múltiples pestañas con datos específicos para cada sección.
-                  </p>
+                <div className="dashboard-indicator-description">
+                  Seguidores en redes sociales
                 </div>
+              </div>
+              <div className="dashboard-indicator-card">
+                <h4 className="dashboard-indicator-title">
+                  Horas de Formación
+                </h4>
+                <div className="dashboard-indicator-value">
+                  {getValueByCategory("HorasFormación")}
+                </div>
+                <div className="dashboard-indicator-description">
+                  Total de horas capacitación
+                </div>
+              </div>
+              <div className="dashboard-indicator-card">
+                <h4 className="dashboard-indicator-title">Financiamiento</h4>
+                <div className="dashboard-indicator-value">
+                  ${getValueByCategory("Financiamiento").toLocaleString()}
+                </div>
+                <div className="dashboard-indicator-description">
+                  Monto recaudado USD
+                </div>
+              </div>
+            </div>
+          </div>
+        );
 
-                <h4>Categorías Soportadas</h4>
-                <ul className="categories-list">
-                  <li>
-                    <code>current_students</code> - Estudiantes actuales
-                  </li>
-                  <li>
-                    <code>total_graduates</code> - Total de egresados
-                  </li>
-                  <li>
-                    <code>employment_rate</code> - Tasa de empleabilidad (%)
-                  </li>
-                  <li>
-                    <code>graduation_rate</code> - Tasa de graduación (%)
-                  </li>
-                  <li>
-                    <code>total_professors</code> - Total de docentes
-                  </li>
-                  <li>
-                    <code>phd_professors</code> - Docentes con doctorado
-                  </li>
-                  <li>
-                    <code>masters_professors</code> - Docentes con maestría
-                  </li>
-                  <li>
-                    <code>specialization_professors</code> - Docentes con
-                    especialización
-                  </li>
-                  <li>
-                    <code>national_presentations</code> - Ponencias nacionales
-                  </li>
-                  <li>
-                    <code>international_presentations</code> - Ponencias
-                    internacionales
-                  </li>
-                  <li>
-                    <code>scientific_articles</code> - Artículos científicos
-                  </li>
-                  <li>
-                    <code>technical_productions</code> - Producción técnica
-                  </li>
-                  <li>
-                    <code>book_chapters</code> - Capítulos de libros
-                  </li>
-                  <li>
-                    <code>total_agreements</code> - Total de convenios
-                  </li>
-                </ul>
+      case "participacion":
+        return (
+          <div className="dashboard-fade-in">
+            <div className="dashboard-stats-grid">
+              <DashboardStatsCard
+                title="Total Participantes"
+                value={getValueByCategory("Participantes").toLocaleString()}
+                icon="👥"
+                color="#2196F3"
+                colorClass="blue"
+              />
+              <DashboardStatsCard
+                title="Capacitados"
+                value={getValueByCategory("Capacitados")}
+                icon="🎓"
+                color="#4CAF50"
+              />
+              <DashboardStatsCard
+                title="Jóvenes"
+                value={getValueByCategory("Jovenes").toLocaleString()}
+                icon="👨‍🎓"
+                color="#FF9800"
+                colorClass="orange"
+              />
+              <DashboardStatsCard
+                title="Adultos Mayores"
+                value={getValueByCategory("AdultosMayores")}
+                icon="👴"
+                color="#9C27B0"
+                colorClass="purple"
+              />
+            </div>
+
+            <div className="dashboard-charts-grid">
+              <div className="dashboard-chart-container">
+                <h3 className="dashboard-chart-title">
+                  Participación por Género
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={demograficosData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="value"
+                      label={({ name, percent }) =>
+                        `${name} ${(percent * 100).toFixed(0)}%`
+                      }
+                    >
+                      {demograficosData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="dashboard-chart-container">
+                <h3 className="dashboard-chart-title">
+                  Distribución de Participantes
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={participacionData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="value" fill="#4CAF50" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="dashboard-demographic-section">
+              <h3 className="dashboard-demographic-title">
+                Datos Demográficos
+              </h3>
+              <div className="dashboard-demographic-grid">
+                <div>
+                  <h4 className="dashboard-demographic-subtitle">
+                    Por Ubicación
+                  </h4>
+                  <div className="dashboard-demographic-item">
+                    <span className="dashboard-demographic-label">
+                      Zona Rural:
+                    </span>
+                    <span className="dashboard-demographic-value">
+                      {getValueByCategory("Rural")} proyectos
+                    </span>
+                  </div>
+                  <div className="dashboard-demographic-item">
+                    <span className="dashboard-demographic-label">
+                      Zona Urbana:
+                    </span>
+                    <span className="dashboard-demographic-value">
+                      {getValueByCategory("Urbano")} proyectos
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="dashboard-demographic-subtitle">
+                    Comunidades
+                  </h4>
+                  <div className="dashboard-demographic-item">
+                    <span className="dashboard-demographic-label">
+                      Grupos Apoyados:
+                    </span>
+                    <span className="dashboard-demographic-value">
+                      {getValueByCategory("Comunidades")}
+                    </span>
+                  </div>
+                  <div className="dashboard-demographic-item">
+                    <span className="dashboard-demographic-label">
+                      Voluntarios:
+                    </span>
+                    <span className="dashboard-demographic-value">
+                      {getValueByCategory("Voluntarios")}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "alianzas":
+        return (
+          <div className="dashboard-fade-in">
+            <div className="dashboard-stats-grid">
+              <DashboardStatsCard
+                title="Alianzas Estratégicas"
+                value={getValueByCategory("Alianzas")}
+                icon="🤝"
+                color="#4CAF50"
+              />
+              <DashboardStatsCard
+                title="Empresas Clientes"
+                value={getValueByCategory("Clientes")}
+                icon="🏢"
+                color="#2196F3"
+                colorClass="blue"
+              />
+              <DashboardStatsCard
+                title="Patrocinadores"
+                value={getValueByCategory("Patrocinadores")}
+                icon="💼"
+                color="#FF9800"
+                colorClass="orange"
+              />
+              <DashboardStatsCard
+                title="Presencia Internacional"
+                value={`${getValueByCategory("Países")} países`}
+                icon="🌍"
+                color="#9C27B0"
+                colorClass="purple"
+              />
+            </div>
+
+            <div className="dashboard-charts-grid">
+              <div className="dashboard-chart-container">
+                <h3 className="dashboard-chart-title">Red de Alianzas</h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={alianzasData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="value" fill="#4CAF50" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="dashboard-chart-container">
+                <h3 className="dashboard-chart-title">
+                  Indicadores de Gestión
+                </h3>
+                <div className="dashboard-management-indicators">
+                  <div className="dashboard-management-item">
+                    <span>Consultorias Brindadas:</span>
+                    <span className="dashboard-management-value">
+                      {getValueByCategory("Consultorias")}
+                    </span>
+                  </div>
+                  <div className="dashboard-management-item">
+                    <span>Donaciones Recibidas:</span>
+                    <span className="dashboard-management-value">
+                      {getValueByCategory("Donaciones")}
+                    </span>
+                  </div>
+                  <div className="dashboard-management-item">
+                    <span>Premios Obtenidos:</span>
+                    <span className="dashboard-management-value">
+                      {getValueByCategory("Premios")}
+                    </span>
+                  </div>
+                  <div className="dashboard-management-item">
+                    <span>Estudios de Caso:</span>
+                    <span className="dashboard-management-value">
+                      {getValueByCategory("EstudiosCaso")}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="dashboard-chart-container">
+              <h3 className="dashboard-chart-title">Estadísticas Operativas</h3>
+              <div className="dashboard-indicators-grid">
+                <div className="dashboard-indicator-card">
+                  <div className="dashboard-indicator-value">
+                    {getValueByCategory("Reuniones")}
+                  </div>
+                  <div className="dashboard-indicator-description">
+                    Reuniones Anuales
+                  </div>
+                </div>
+                <div className="dashboard-indicator-card">
+                  <div className="dashboard-indicator-value">
+                    {getValueByCategory("Propuestas")}
+                  </div>
+                  <div className="dashboard-indicator-description">
+                    Propuestas Presentadas
+                  </div>
+                </div>
+                <div className="dashboard-indicator-card">
+                  <div className="dashboard-indicator-value">
+                    {getValueByCategory("Colaboradores")}
+                  </div>
+                  <div className="dashboard-indicator-description">
+                    Colaboradores
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case "innovacion":
+        return (
+          <div className="dashboard-fade-in">
+            <div className="dashboard-stats-grid">
+              <DashboardStatsCard
+                title="Proyectos Innovadores"
+                value={getValueByCategory("Innovacion")}
+                icon="💡"
+                color="#4CAF50"
+              />
+              <DashboardStatsCard
+                title="Aplicaciones Desarrolladas"
+                value={getValueByCategory("Aplicaciones")}
+                icon="📱"
+                color="#2196F3"
+                colorClass="blue"
+              />
+              <DashboardStatsCard
+                title="Tecnologías Aplicadas"
+                value={getValueByCategory("Tics")}
+                icon="💻"
+                color="#FF9800"
+                colorClass="orange"
+              />
+              <DashboardStatsCard
+                title="Sostenibilidad"
+                value={getValueByCategory("Sostenibilidad")}
+                icon="🌱"
+                color="#4CAF50"
+              />
+            </div>
+
+            <div className="dashboard-charts-grid">
+              <div className="dashboard-chart-container">
+                <h3 className="dashboard-chart-title">
+                  Publicaciones y Materiales
+                </h3>
+                <div className="dashboard-indicators-grid">
+                  <div className="dashboard-indicator-card">
+                    <div className="dashboard-indicator-title">
+                      Publicaciones
+                    </div>
+                    <div className="dashboard-indicator-value">
+                      {getValueByCategory("Publicaciones")}
+                    </div>
+                    <div className="dashboard-indicator-description">
+                      Artículos e informes
+                    </div>
+                  </div>
+                  <div className="dashboard-indicator-card">
+                    <div className="dashboard-indicator-title">
+                      Materiales Educativos
+                    </div>
+                    <div className="dashboard-indicator-value">
+                      {getValueByCategory("Materiales")}
+                    </div>
+                    <div className="dashboard-indicator-description">
+                      Recursos creados
+                    </div>
+                  </div>
+                  <div className="dashboard-indicator-card">
+                    <div className="dashboard-indicator-title">Testimonios</div>
+                    <div className="dashboard-indicator-value">
+                      {getValueByCategory("Testimonios")}
+                    </div>
+                    <div className="dashboard-indicator-description">
+                      Experiencias compartidas
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="dashboard-chart-container">
+                <h3 className="dashboard-chart-title">
+                  Participación en Eventos
+                </h3>
+                <div className="dashboard-indicators-grid">
+                  <div className="dashboard-indicator-card">
+                    <div className="dashboard-indicator-title">Ferias</div>
+                    <div className="dashboard-indicator-value">
+                      {getValueByCategory("Ferias")}
+                    </div>
+                    <div className="dashboard-indicator-description">
+                      Eventos de exposición
+                    </div>
+                  </div>
+                  <div className="dashboard-indicator-card">
+                    <div className="dashboard-indicator-title">
+                      Diagnósticos
+                    </div>
+                    <div className="dashboard-indicator-value">
+                      {getValueByCategory("Diagnosticos")}
+                    </div>
+                    <div className="dashboard-indicator-description">
+                      Estudios realizados
+                    </div>
+                  </div>
+                  <div className="dashboard-indicator-card">
+                    <div className="dashboard-indicator-title">
+                      Practicantes
+                    </div>
+                    <div className="dashboard-indicator-value">
+                      {getValueByCategory("Practicantes")}
+                    </div>
+                    <div className="dashboard-indicator-description">
+                      Estudiantes en pasantías
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="dashboard-chart-container">
+              <h3 className="dashboard-chart-title">Métricas de Calidad</h3>
+              <div className="dashboard-quality-metrics">
+                <div
+                  className="dashboard-quality-metric"
+                  style={{
+                    background: "linear-gradient(135deg, #2196F3, #1976D2)",
+                  }}
+                >
+                  <div className="dashboard-quality-metric-value">
+                    {getValueByCategory("Encuestas")}
+                  </div>
+                  <div className="dashboard-quality-metric-label">
+                    Encuestas Realizadas
+                  </div>
+                </div>
+                <div
+                  className="dashboard-quality-metric"
+                  style={{
+                    background: "linear-gradient(135deg, #4CAF50, #388E3C)",
+                  }}
+                >
+                  <div className="dashboard-quality-metric-value">
+                    {getValueByCategory("Solicitudes")}
+                  </div>
+                  <div className="dashboard-quality-metric-label">
+                    Solicitudes Atendidas
+                  </div>
+                </div>
+                <div
+                  className="dashboard-quality-metric"
+                  style={{
+                    background: "linear-gradient(135deg, #9C27B0, #7B1FA2)",
+                  }}
+                >
+                  <div className="dashboard-quality-metric-value">
+                    {getValueByCategory("Indicadores")}
+                  </div>
+                  <div className="dashboard-quality-metric-label">
+                    Indicadores Monitoreados
+                  </div>
+                </div>
+                <div
+                  className="dashboard-quality-metric"
+                  style={{
+                    background: "linear-gradient(135deg, #FF9800, #F57C00)",
+                  }}
+                >
+                  <div className="dashboard-quality-metric-value">
+                    {getValueByCategory("VisitasWeb").toLocaleString()}
+                  </div>
+                  <div className="dashboard-quality-metric-label">
+                    Visitas Web
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -492,91 +756,86 @@ const Dashboard = ({ isDarkMode }) => {
   };
 
   return (
-    <div
-      className={`dashboard-main-container ${
-        isDarkMode ? "dark-mode" : "light-mode"
-      }`}
-    >
-      <div className="dashboard-header">
-        <h1>Dashboard Analítico</h1>
-        <p>
-          Programa de Ingeniería de Sistemas - Universidad Popular del Cesar
-        </p>
+    <div className="dashboard-main-container">
+      {/* Header */}
+      <header className="dashboard-main-header">
+        <div className="dashboard-header-content">
+          <h1 className="dashboard-main-title">Dashboard Analítico</h1>
+          <p className="dashboard-main-subtitle">
+            Sistema Integrado de Visibilidad y Vinculación Externa - Programa de
+            Ingeniería de Sistemas
+          </p>
+          <p className="dashboard-institution-name">
+            Universidad Popular del Cesar
+          </p>
 
-        <div className="dashboard-actions">
-          <div className="export-buttons">
-            <button className="import-button" onClick={toggleImportPanel}>
-              {showImport ? "Ocultar Importación" : "Importar Datos"}
+          {/* Botones de exportación */}
+          <div className="dashboard-export-buttons">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept=".csv"
+              style={{ display: "none" }}
+            />
+            <button
+              className="dashboard-export-btn"
+              onClick={handleImportData}
+              disabled={isExporting}
+            >
+              {isExporting ? "⏳ Procesando..." : "📥 Importar CSV"}
             </button>
-            <button onClick={() => handleExportData("csv")}>
-              Exportar CSV
+            <button
+              className="dashboard-export-btn"
+              onClick={handleExportCSV}
+              disabled={isExporting}
+            >
+              {isExporting ? "⏳ Exportando..." : "📄 Exportar CSV"}
             </button>
-            <button onClick={() => handleExportData("excel")}>
-              Exportar Excel
+            <button
+              className="dashboard-export-btn"
+              onClick={handleExportExcel}
+              disabled={isExporting}
+            >
+              {isExporting ? "⏳ Exportando..." : "📊 Exportar Excel"}
             </button>
-            <button onClick={() => handleExportData("pdf")}>
-              Exportar PDF
+            <button
+              className="dashboard-export-btn"
+              onClick={handleExportPDF}
+              disabled={isExporting}
+            >
+              {isExporting ? "⏳ Exportando..." : "📋 Exportar PDF"}
             </button>
           </div>
         </div>
+      </header>
 
-        {showImport && (
-          <div className="quick-import-panel">
-            <ImportData onDataImported={handleDataImported} />
-          </div>
-        )}
-      </div>
-
-      <div
-        className={`dashboard-content-wrapper ${
-          isDarkMode ? "dark-mode" : "light-mode"
-        }`}
-      >
-        <div className="tab-nav-horizontal">
-          <button
-            className={
-              activeTab === "general" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("general")}
-          >
-            General
-          </button>
-          <button
-            className={
-              activeTab === "graduates" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("graduates")}
-          >
-            Egresados
-          </button>
-          <button
-            className={
-              activeTab === "professors" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("professors")}
-          >
-            Docentes
-          </button>
-          <button
-            className={
-              activeTab === "production" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("production")}
-          >
-            Producción Académica
-          </button>
-          <button
-            className={
-              activeTab === "import" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => setActiveTab("import")}
-          >
-            Importar
-          </button>
+      {/* Navigation Tabs */}
+      <div className="dashboard-navigation">
+        <div className="dashboard-nav-container">
+          <nav className="dashboard-nav-tabs">
+            {[
+              { id: "general", label: "General" },
+              { id: "participacion", label: "Participación" },
+              { id: "alianzas", label: "Alianzas" },
+              { id: "innovacion", label: "Innovación" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`dashboard-nav-tab ${
+                  activeTab === tab.id ? "dashboard-tab-active" : ""
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
         </div>
-
-        <div className="tab-content-container">{renderTabContent()}</div>
       </div>
+
+      {/* Main Content */}
+      <main className="dashboard-main-content">{renderTabContent()}</main>
     </div>
   );
 };
